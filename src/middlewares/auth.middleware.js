@@ -10,14 +10,15 @@ module.exports = async function(req,res,next){
     if (!accessToken) {
       return res.status(401).send({msg:"Please send token in format: Bearer <token>"})
     }
+    let user
     try {
-        let user = await axios.get(`https://gatewayservice.sit.kmutt.ac.th/api/me`,{
+        user = await axios.get(`https://gatewayservice.sit.kmutt.ac.th/api/me`,{
         headers: {
             Authorization: bearerAccessToken
         }
     })
     } catch (error) {
-        throw new Error("require client secret in BE env")
+        return res.status(400).send({ msg: error.message })
     }
     
     user = user.data
