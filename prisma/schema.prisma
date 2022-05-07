@@ -1,0 +1,48 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model pet_type {
+  pet_type_id   Int        @id @default(autoincrement())
+  pet_type_name String     @db.VarChar(100)
+  petition      petition[]
+}
+
+model petition {
+  pet_id      Int         @id @default(autoincrement())
+  pet_details String      @db.VarChar(500)
+  pet_date    DateTime    @db.Date
+  pet_type_id Int
+  status_id   Int
+  log_id      Int
+  user_detail user_detail @relation(fields: [log_id], references: [log_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_user_detail_fk")
+  pet_type    pet_type    @relation(fields: [pet_type_id], references: [pet_type_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_pet_type_fk")
+  status      status      @relation(fields: [status_id], references: [status_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_status_fk")
+
+  @@index([pet_type_id], map: "petition_pet_type_fk")
+  @@index([status_id], map: "petition_status_fk")
+  @@index([log_id], map: "petition_user_detail_fk")
+}
+
+model status {
+  status_id   Int        @id @default(autoincrement())
+  status_name String     @db.VarChar(50)
+  petition    petition[]
+}
+
+model user_detail {
+  log_id    Int        @id @default(autoincrement())
+  user_id   String     @db.VarChar(20)
+  user_type String?    @db.VarChar(100)
+  name_th   String?    @db.VarChar(50)
+  name_en   String?    @db.VarChar(50)
+  email     String?    @db.VarChar(50)
+  roles     String?    @db.VarChar(10)
+  petition  petition[]
+}
