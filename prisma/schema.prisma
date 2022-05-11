@@ -49,6 +49,12 @@ model petition {
   @@index([user_id], map: "petition_user_details_fk")
 }
 
+model roles {
+  role_id      String         @id @db.VarChar(40)
+  role_name    String         @db.VarChar(20)
+  user_details user_details[]
+}
+
 model status {
   status_id          String     @id @db.VarChar(40)
   status_name        String     @db.VarChar(50)
@@ -97,7 +103,10 @@ model user_details {
   name_th   String?    @db.VarChar(50)
   name_en   String?    @db.VarChar(50)
   email     String?    @db.VarChar(50)
-  roles     String?    @db.VarChar(10)
+  role_id   String     @db.VarChar(40)
+  roles     roles      @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "user_details_roles_fk")
   news      news[]
   petition  petition[]
+
+  @@index([role_id], map: "user_details_roles_fk")
 }
