@@ -1,58 +1,57 @@
-# name: CI_CD SMOSIT_BACKEND
+name: CI_CD SMOSIT_BACKEND
 
-# on:
-#   push:
-#     branches: [main, dev] 
-#   pull_request:
-#     branches: [main, dev]
+on:
+  push:
+    branches: [main, dev] 
+  pull_request:
+    branches: [main, dev]
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout Code
-#         uses: actions/checkout@v2     
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2     
 
-#       - name: Login to Github Container Registy
-#         uses: docker/login-action@v1
-#         with:
-#           registry: ghcr.io
-#           username: ${{ secrets.ACCOUNT }}  
-#           password: ${{ secrets.TOKEN_GITHUB }} 
+      - name: Login to Github Container Registy
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.ACCOUNT }}  
+          password: ${{ secrets.TOKEN_GITHUB }} 
 
-#       - name : Create env file
-#         run : |
-#             touch .env
-#             echo CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} >> .env
-#             echo CLIENT_ID=${{ secrets.CLIENT_ID }} >> .env
-#             ls -a
-#             cat .env
+      - name : Create env file
+        run : |
+            touch .env
+            echo CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} >> .env
+            echo CLIENT_ID=${{ secrets.CLIENT_ID }} >> .env
+            ls -a
+            cat .env
 
-#       - name: Build Docker image
-#         run: |
-#            docker build . --tag ghcr.io/ppitchanon/smosit-backend:latest
-#            docker images
+      - name: Build Docker image
+        run: |
+           docker build . --tag ghcr.io/ppitchanon/smosit-backend:latest
+           docker images
 
-#       - name: Push Docker image to Github Container registry
-#         run: |
-#           docker push ghcr.io/ppitchanon/smosit-backend:latest
+      - name: Push Docker image to Github Container registry
+        run: |
+          docker push ghcr.io/ppitchanon/smosit-backend:latest
 
-#   deploy:
-#     needs: build 
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Login ssh to remote server and deploy container 
-#         uses: appleboy/ssh-action@master
-#         with:
-#           host: ${{ secrets.HOST }}          # HOST คือ ip ของ VM
-#           username: ${{ secrets.USERNAME }}  # Username ที่เอาไว้ login เข้า VM
-#           password: ${{ secrets.PASSWORD }}
-#           # key: ${{ secrets.SSH_KEY }}        # ค่าของไฟล์ private_key
-#           script: |
-#             docker ps
-#             docker rm -f api 
-#             docker pull ghcr.io/ppitchanon/smosit-backend:latest 
-#             docker images
-#             docker-compose up -d backend
-#             docker image prune -f 
-#             docker ps -a
+  deploy:
+    needs: build 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login ssh to remote server and deploy container 
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}          
+          username: ${{ secrets.USERNAME }} 
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            docker ps
+            docker rm -f api 
+            docker pull ghcr.io/ppitchanon/smosit-backend:latest 
+            docker images
+            docker-compose up -d backend
+            docker image prune -f 
+            docker ps -a
