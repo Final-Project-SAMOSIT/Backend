@@ -17,11 +17,14 @@ app.listen(PORT, () => {
 
 // Add CORS
 app.use(cors({
-  origin: ["*", "localhost:3000"],
+  origin: "*",
   methods: ["GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS"],
-  optionsSuccessStatus: 200,
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Access-Control-Allow-Origin', 'Origin', 'Accept'],
-  credentials: true,
+  credentials: true, //Credentials are cookies, authorization headers or TLS client certificates.
 }))
+
+// include before other routes
+app.options('*', cors())
 
 app.use(require('./routes'))
