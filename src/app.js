@@ -17,7 +17,7 @@ app.listen(PORT, () => {
 
 // Add CORS
 app.use(cors({
-  origin: "*",
+  origin: ["*", "localhost:3000"],
   methods: ["GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS"],
   optionsSuccessStatus: 200,
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'device-remember-token', 'Access-Control-Allow-Origin', 'Origin', 'Accept'],
