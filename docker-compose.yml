@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+    backend:
+      build: .
+      container_name: backend
+      volumes:
+       - '.:/usr/src/app'
+      restart: always
+      ports:
+        - '4000:4000'
+      environment:
+        - DATABASE_URL=mysql://admin:123456@167.71.218.150:3306/smosit
+        - REDIRECT_URI=http://localhost:3000/redirect
+
+        
+
+ 
