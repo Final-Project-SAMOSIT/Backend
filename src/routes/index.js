@@ -32,7 +32,7 @@ router.post('/auth', async (req, res) => {
     try {
         user = await axios.get(`https://gatewayservice.sit.kmutt.ac.th/api/oauth/token?client_secret=${clientSecret}&client_id=${clientId}&code=${code}&redirect_uri=${redirectURI}`)
     } catch (error) {
-        console.log(error.response.data);
+        return res.status(500).send(error)
     }
     // let user = await axios.get(`https://gatewayservice.sit.kmutt.ac.th/api/oauth/token?client_secret=${clientSecret}&client_id=${clientId}&code=${code}&redirect_uri=${redirectURI}`)
     user = user.data
