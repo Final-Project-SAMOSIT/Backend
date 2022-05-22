@@ -6,7 +6,11 @@ const dayjs = require("dayjs")
 const pet = new PrismaClient().petition
 
 router.get("/getPetition", async(req,res)=>{
-    let test = await pet.findMany()
+    let test = await pet.findMany({
+        include:{
+            status: true
+        }
+    })
     if (test == undefined || test.length < 0) {
         return res.status(400).send({ status: "Don't have any data" })
     }
