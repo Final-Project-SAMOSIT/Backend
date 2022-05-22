@@ -50,7 +50,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             docker ps
-            docker rm -f api 
+            docker rm -f backend 
             docker pull ghcr.io/ppitchanon/smosit-backend:latest 
             docker images
             docker-compose up -d backend
