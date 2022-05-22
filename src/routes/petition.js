@@ -8,7 +8,8 @@ const pet = new PrismaClient().petition
 router.get("/getPetition", async(req,res)=>{
     let test = await pet.findMany({
         include:{
-            status: true
+            status: true,
+            pet_types: true
         }
     })
     if (test == undefined || test.length < 0) {
