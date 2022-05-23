@@ -59,4 +59,23 @@ router.put("/editStatusPet/:id", async(req,res) => {
     }
 })
 
+router.delete("/deletePet/:id", async(req,res)=>{
+    try {
+        let petId = String(req.params.id)
+        let result = await pet.delete({
+            where: {
+                pet_id: petId
+            }
+        })
+
+        if(!result){
+            return res.send({ status: "Can't find this petition" })
+        }
+        return res.send({ status: "Delete Successful" })
+
+    } catch (error) {
+        return res.status(400).send({ status: "Can't delete", message: error.message })
+    }
+})
+
 module.exports = router
