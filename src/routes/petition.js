@@ -20,8 +20,19 @@ router.get("/getPetition", async(req,res)=>{
 
 router.post("/addPetition",authMiddleware , async(req,res) => {
     try {
-        let { pet_topic,pet_details,type_id } = req.body
+        let { pet_topic,pet_details,type_id } = req.body 
         let {user_id} = req.user
+        let userTotal = await pet.findMany({
+            where: {
+                user_id: user_id,
+                status_id: "1"
+            }
+        })
+
+        if (userTotal.length >= 5){
+            return res.status(500).send({ msg: "Can't add petitions more than 5 times in sent status" })
+        } 
+
         let result = await pet.create({
             data:{
                 pet_topic: pet_topic,
@@ -35,7 +46,6 @@ router.post("/addPetition",authMiddleware , async(req,res) => {
 
         return res.send({ msg: "Successfully", data: result })
     } catch (error) {
-        // console.log("🚀 ~ file: petition.js ~ line 33 ~ router.post ~ error", error)
         return res.status(400).send({ status: "Don't have any data", message: error.message })
     }
 })
