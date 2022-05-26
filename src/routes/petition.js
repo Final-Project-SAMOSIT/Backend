@@ -13,7 +13,7 @@ router.get("/getPetition", async (req, res) => {
                 pet_types: true
             },
             orderBy: {
-                pet_date: "desc"
+                pet_date: "asc"
             }
         })
         if (test == undefined || test.length < 0) {
@@ -39,7 +39,7 @@ router.get("/getPetition/:userId", async (req, res) => {
                 status: true
             },
             orderBy: {
-                pet_date: "asc"
+                pet_date: "desc"
             }
         })
 
