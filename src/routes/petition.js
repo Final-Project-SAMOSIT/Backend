@@ -10,6 +10,9 @@ router.get("/getPetition", async(req,res)=>{
         include:{
             status: true,
             pet_types: true
+        },
+        orderBy:{
+            pet_date: "asc"
         }
     })
     if (test == undefined || test.length < 0) {
@@ -53,7 +56,28 @@ router.post("/addPetition",authMiddleware , async(req,res) => {
 router.put("/editStatusPet/:id", async(req,res) => {
     try {
         let petId = String(req.params.id)
-        let { status_id } = req.body
+        let { status } = req.body
+        let status_id = ""
+        switch (status) {
+            case "Sent":
+                status_id = "1"
+                break;
+            case "Approve":
+                status_id = "2"
+                break;
+            case "In Progress":
+                status_id = "3"
+                break;
+            case "Done":
+                status_id = "4"
+                break;
+            case "Reject":
+                status_id = "5"
+                break;
+            default:
+                throw new Error("Cannot set this status")
+        }
+
         let updateStatus = await pet.update({
             where: {
                 pet_id: petId
