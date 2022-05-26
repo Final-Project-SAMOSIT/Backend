@@ -47,19 +47,19 @@ router.post('/auth', async (req, res) => {
 //     return res.send({ userDetail: result })
 // })
 
-router.get("/auth/check",authMiddleware, async(req,res)=>{
+router.get("/auth/check", authMiddleware, async (req, res) => {
     let { user_id } = req.user
-    let userInDB = await users.findUnique({where:{user_id:user_id}})
+    let userInDB = await userDetails.findUnique({ where: { user_id: user_id } })
     try {
         if (userInDB == undefined || userInDB.length < 0) {
             return res.status(204).send({ status: "Don't have any data" })
         }
-    
+
     } catch (error) {
         return res.status(400).send({ msg: error.message })
     }
 
-    return res.status(200).send({userDetail: req.user})
+    return res.status(200).send({ userDetail: userInDB })
 })
 
 module.exports = router
