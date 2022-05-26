@@ -9,13 +9,13 @@ datasource db {
 }
 
 model admins {
-  admin_id   String @id @db.VarChar(40)
+  admin_id   String @id @db.VarChar(40) @default(uuid())
   admin_user String @db.VarChar(50)
   admin_pass String @db.VarChar(50)
 }
 
 model news {
-  new_id       String       @id @db.VarChar(40)
+  new_id       String       @id @db.VarChar(40) @default(uuid())
   new_topic    String       @db.VarChar(100)
   new_details  String?      @db.VarChar(500)
   new_date     DateTime     @db.Date
@@ -27,13 +27,13 @@ model news {
 }
 
 model pet_types {
-  pet_type_id   String     @id @db.VarChar(40)
+  pet_type_id   String     @id @db.VarChar(40) 
   pet_type_name String     @db.VarChar(100)
   petition      petition[]
 }
 
 model petition {
-  pet_id       String       @id @db.VarChar(40)
+  pet_id       String       @id @db.VarChar(40) @default(uuid())
   pet_topic    String       @db.VarChar(100)
   pet_details  String       @db.VarChar(500)
   pet_date     DateTime     @db.DateTime(0)
