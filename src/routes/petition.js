@@ -10,6 +10,9 @@ router.get("/getPetition", async(req,res)=>{
         include:{
             status: true,
             pet_types: true
+        },
+        orderBy:{
+            pet_date: "asc"
         }
     })
     if (test == undefined || test.length < 0) {
