@@ -13,7 +13,7 @@ router.get("/getPetition", async(req,res)=>{
         }
     })
     if (test == undefined || test.length < 0) {
-        return res.status(400).send({ status: "Don't have any data" })
+        return res.status(204).send({ status: "Don't have any data" })
     }
     return res.send({ data: test })
 })
