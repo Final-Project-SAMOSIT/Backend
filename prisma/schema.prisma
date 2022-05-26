@@ -9,7 +9,7 @@ datasource db {
 }
 
 model admins {
-  admin_id   String @id @db.VarChar(40) @default(uuid())
+  admin_id   String @id @db.VarChar(40)
   admin_user String @db.VarChar(50)
   admin_pass String @db.VarChar(50)
 }
@@ -27,7 +27,7 @@ model news {
 }
 
 model pet_types {
-  pet_type_id   String     @id @db.VarChar(40) 
+  pet_type_id   String     @id @db.VarChar(40)
   pet_type_name String     @db.VarChar(100)
   petition      petition[]
 }

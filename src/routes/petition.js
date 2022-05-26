@@ -19,11 +19,12 @@ router.get("/getPetition", async (req, res) => {
         if (test == undefined || test.length < 0) {
             return res.status(204).send({ status: "Don't have any data" })
         }
+
+        return res.send({ data: test })
     } catch (error) {
-        res.status(500)
-        return res.send({ msg: error.message })
+        return res.status(400).send({ status: "Don't have any data", message: error.message })
     }
-    return res.send({ data: test })
+    
 })
 
 router.get("/getPetition/:userId", async (req, res) => {
@@ -36,6 +37,9 @@ router.get("/getPetition/:userId", async (req, res) => {
             include: {
                 pet_types: true,
                 status: true
+            },
+            orderBy: {
+                pet_date: "asc"
             }
         })
 
@@ -45,8 +49,7 @@ router.get("/getPetition/:userId", async (req, res) => {
         return res.send({ data: result })
 
     } catch (error) {
-        res.status(500)
-        return res.send({ msg: error.message })
+        return res.status(400).send({ status: "Don't have any data", message: error.message })
     }
 })
 
