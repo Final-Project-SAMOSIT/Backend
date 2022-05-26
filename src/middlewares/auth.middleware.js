@@ -1,7 +1,7 @@
 const { default: axios } = require("axios")
 
 module.exports = async function(req,res,next){
-    console.log(req.headers)
+    // console.log(req.headers)
     const bearerAccessToken = req.headers.authorization
     if (!bearerAccessToken) {
       return res.status(401).send({msg:"No bearer access token was provided"})
