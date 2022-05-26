@@ -15,7 +15,7 @@ router.post('/auth', async (req, res) => {
     try {
         user = await axios.get(`https://gatewayservice.sit.kmutt.ac.th/api/oauth/token?client_secret=${clientSecret}&client_id=${clientId}&code=${code}&redirect_uri=${redirectURI}`)
     } catch (error) {
-        console.log("🚀 ~ file: auth.controller.js ~ line 17 ~ router.post ~ error", error)
+        // console.log("🚀 ~ file: auth.controller.js ~ line 17 ~ router.post ~ error", error)
         return res.status(error.response.status).send({ msg: error.response.data.message })
     }
     user = user.data
@@ -35,16 +35,16 @@ router.post('/auth', async (req, res) => {
     return res.status(200).send({ data: { ...user, token: { token: accessToken } } })
 })
 
-// router.get("/auth/redirect", async (req, res) => {
-//     let { code } = req.query
-//     let result
-//     try {
-//         result = await authService.handleRedirect(code)
-//     } catch (error) {
-//         return res.status(400).send({ msg: error.message })
-//     }
-//     return res.send({ userDetail: result })
-// })
+router.get("/auth/redirect", async (req, res) => {
+    let { code } = req.query
+    let result
+    try {
+        result = await authService.handleRedirect(code)
+    } catch (error) {
+        return res.status(400).send({ msg: error.message })
+    }
+    return res.send({ userDetail: result })
+})
 
 // router.get("/auth/check",authMiddleware, async(req,res)=>{
 //     let { user_id, user_type, name_th, name_en, email } = req.user
