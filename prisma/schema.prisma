@@ -15,7 +15,7 @@ model admins {
 }
 
 model news {
-  new_id       String       @id @db.VarChar(40) @default(uuid())
+  new_id       String       @id @db.VarChar(40)
   new_topic    String       @db.VarChar(100)
   new_details  String?      @db.VarChar(500)
   new_date     DateTime     @db.Date
@@ -33,10 +33,10 @@ model pet_types {
 }
 
 model petition {
-  pet_id       String       @id @db.VarChar(40) @default(uuid())
+  pet_id       String       @id @db.VarChar(40)
   pet_topic    String       @db.VarChar(100)
   pet_details  String       @db.VarChar(500)
-  pet_date     DateTime     @db.Date
+  pet_date     DateTime     @db.DateTime(0)
   user_id      String       @db.VarChar(20)
   type_id      String       @db.VarChar(40)
   status_id    String       @db.VarChar(40)

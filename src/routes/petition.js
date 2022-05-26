@@ -5,26 +5,55 @@ const authMiddleware = require('../middlewares/auth.middleware')
 const dayjs = require("dayjs")
 const pet = new PrismaClient().petition
 
-router.get("/getPetition", async(req,res)=>{
-    let test = await pet.findMany({
-        include:{
-            status: true,
-            pet_types: true
-        },
-        orderBy:{
-            pet_date: "asc"
+router.get("/getPetition", async (req, res) => {
+    try {
+        let test = await pet.findMany({
+            include: {
+                status: true,
+                pet_types: true
+            },
+            orderBy: {
+                pet_date: "asc"
+            }
+        })
+        if (test == undefined || test.length < 0) {
+            return res.status(204).send({ status: "Don't have any data" })
         }
-    })
-    if (test == undefined || test.length < 0) {
-        return res.status(204).send({ status: "Don't have any data" })
+    } catch (error) {
+        res.status(500)
+        return res.send({ msg: error.message })
     }
     return res.send({ data: test })
 })
 
-router.post("/addPetition",authMiddleware , async(req,res) => {
+router.get("/getPetition/:userId", async (req, res) => {
     try {
-        let { pet_topic,pet_details,type_id } = req.body 
-        let {user_id} = req.user
+        let userId = String(req.params.userId)
+        let result = await pet.findMany({
+            where: {
+                user_id: userId
+            },
+            include: {
+                pet_types: true,
+                status: true
+            }
+        })
+
+        if (result == undefined || result.length < 0) {
+            return res.status(400).send({ status: "Don't have any data" })
+        }
+        return res.send({ data: result })
+
+    } catch (error) {
+        res.status(500)
+        return res.send({ msg: error.message })
+    }
+})
+
+router.post("/addPetition", authMiddleware, async (req, res) => {
+    try {
+        let { pet_topic, pet_details, type_id } = req.body
+        let { user_id } = req.user
         let userTotal = await pet.findMany({
             where: {
                 user_id: user_id,
@@ -32,12 +61,12 @@ router.post("/addPetition",authMiddleware , async(req,res) => {
             }
         })
 
-        if (userTotal.length >= 5){
+        if (userTotal.length >= 5) {
             return res.status(500).send({ msg: "Can't add petitions more than 5 times in sent status" })
-        } 
+        }
 
         let result = await pet.create({
-            data:{
+            data: {
                 pet_topic: pet_topic,
                 pet_details: pet_details,
                 pet_date: dayjs().toDate(),
@@ -53,7 +82,7 @@ router.post("/addPetition",authMiddleware , async(req,res) => {
     }
 })
 
-router.put("/editStatusPet/:id", async(req,res) => {
+router.put("/editStatusPet/:id", async (req, res) => {
     try {
         let petId = String(req.params.id)
         let { status } = req.body
@@ -93,7 +122,7 @@ router.put("/editStatusPet/:id", async(req,res) => {
     }
 })
 
-router.delete("/deletePet/:id", async(req,res)=>{
+router.delete("/deletePet/:id", async (req, res) => {
     try {
         let petId = String(req.params.id)
         let result = await pet.delete({
@@ -102,7 +131,7 @@ router.delete("/deletePet/:id", async(req,res)=>{
             }
         })
 
-        if(!result){
+        if (!result) {
             return res.send({ status: "Can't find this petition" })
         }
         return res.send({ status: "Delete Successful" })
