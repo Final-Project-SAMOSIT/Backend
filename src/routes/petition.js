@@ -65,7 +65,7 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
         })
 
         if (userTotal.length >= 5) {
-            return res.status(500).send({ msg: "Can't add petitions more than 5 times in sent status" })
+            return res.status(403).send({ msg: "Can't add petitions more than 5 times in sent status" })
         }
 
         let result = await pet.create({
