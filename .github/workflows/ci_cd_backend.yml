@@ -25,6 +25,8 @@ jobs:
             touch .env
             echo CLIENT_SECRET=${{ secrets.CLIENT_SECRET }} >> .env
             echo CLIENT_ID=${{ secrets.CLIENT_ID }} >> .env
+            echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
+            echo REDIRECT_URI=${{ secrets.REDIRECT_URI }} >> .env
             ls -a
             cat .env
 
