@@ -3,11 +3,11 @@ const router = require('express').Router()
 const { PrismaClient } = require('@prisma/client')
 const authMiddleware = require('../middlewares/auth.middleware')
 const dayjs = require("dayjs")
-const pet = new PrismaClient().petition
+const petition = new PrismaClient().petition
 
 router.get("/getPetition", async (req, res) => {
     try {
-        let test = await pet.findMany({
+        let test = await petition.findMany({
             include: {
                 status: true,
                 pet_types: true
@@ -30,7 +30,7 @@ router.get("/getPetition", async (req, res) => {
 router.get("/getPetition/:userId", async (req, res) => {
     try {
         let userId = String(req.params.userId)
-        let result = await pet.findMany({
+        let result = await petition.findMany({
             where: {
                 user_id: userId
             },
@@ -57,7 +57,7 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
     try {
         let { pet_topic, pet_details, type_id } = req.body
         let { user_id } = req.user
-        let userTotal = await pet.findMany({
+        let userTotal = await petition.findMany({
             where: {
                 user_id: user_id,
                 status_id: "1"
@@ -68,7 +68,7 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
             return res.status(403).send({ msg: "Can't add petitions more than 5 times in sent status" })
         }
 
-        let result = await pet.create({
+        let result = await petition.create({
             data: {
                 pet_topic: pet_topic,
                 pet_details: pet_details,
@@ -110,7 +110,7 @@ router.put("/editStatusPet/:id", async (req, res) => {
                 throw new Error("Cannot set this status")
         }
 
-        let updateStatus = await pet.update({
+        let updateStatus = await petition.update({
             where: {
                 pet_id: petId
             },
@@ -128,7 +128,7 @@ router.put("/editStatusPet/:id", async (req, res) => {
 router.delete("/deletePet/:id", async (req, res) => {
     try {
         let petId = String(req.params.id)
-        let result = await pet.delete({
+        let result = await petition.delete({
             where: {
                 pet_id: petId
             }
