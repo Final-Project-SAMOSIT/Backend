@@ -85,7 +85,7 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
     }
 })
 
-router.put("/editStatusPet/:id", async (req, res) => {
+router.put("/editStatusPetition/:id", async (req, res) => {
     try {
         let petId = String(req.params.id)
         let { status } = req.body
@@ -125,7 +125,7 @@ router.put("/editStatusPet/:id", async (req, res) => {
     }
 })
 
-router.delete("/deletePet/:id", async (req, res) => {
+router.delete("/deletePetition/:id", async (req, res) => {
     try {
         let petId = String(req.params.id)
         let result = await petition.delete({

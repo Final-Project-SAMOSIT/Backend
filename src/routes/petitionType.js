@@ -4,7 +4,7 @@ const router = require('express').Router()
 const { PrismaClient } = require('@prisma/client')
 const petType = new PrismaClient().pet_types
 
-router.get("/getPetType", async(req,res)=>{
+router.get("/getPetitionType", async(req,res)=>{
     let test = await petType.findMany()
     if (test == undefined || test.length < 0) {
         return res.status(400).send({ status: "Don't have any data" })
