@@ -13,6 +13,32 @@ model admins {
   admin_pass String @db.VarChar(20)
 }
 
+model news_contents {
+  news_id                              Int          @id @default(autoincrement())
+  news_title                           String       @db.VarChar(100)
+  news_details                         String       @db.VarChar(2000)
+  news_created_at                      DateTime     @db.Date
+  news_updated_at                      DateTime     @db.Date
+  news_img                             String       @db.VarChar(250)
+  news_caption_img                     String?      @db.VarChar(100)
+  union_year                           Int
+  news_type_id                         String       @db.VarChar(10)
+  user_id                              String       @db.VarChar(20)
+  news_types                           news_types   @relation(fields: [news_type_id], references: [news_type_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_news_contents_news_types1")
+  union_year_news_contentsTounion_year union_year   @relation(fields: [union_year], references: [union_year], onDelete: NoAction, onUpdate: NoAction, map: "fk_news_contents_union_year1")
+  user_details                         user_details @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_news_contents_user_details1")
+
+  @@index([news_type_id], map: "fk_news_contents_news_types1_idx")
+  @@index([union_year], map: "fk_news_contents_union_year1_idx")
+  @@index([user_id], map: "fk_news_contents_user_details1_idx")
+}
+
+model news_types {
+  news_type_id   String          @id @db.VarChar(10)
+  news_type_name String          @db.VarChar(20)
+  news_contents  news_contents[]
+}
+
 model petition {
   petition_id      Int            @id @default(autoincrement())
   petition_topic   String         @db.VarChar(100)
@@ -28,6 +54,12 @@ model petition {
   @@index([status_id], map: "petition_status_fk")
   @@index([petition_type_id], map: "petition_types_fk")
   @@index([user_id], map: "petition_user_details_fk")
+}
+
+model petition_types {
+  petition_type_id   String     @id @db.VarChar(10)
+  petition_type_name String     @db.VarChar(100)
+  petition           petition[]
 }
 
 model roles {
@@ -92,36 +124,4 @@ model user_details {
   petition      petition[]
 
   @@index([role_id], map: "user_details_roles_fk")
-}
-
-model news_contents {
-  news_id                              Int          @id @default(autoincrement())
-  news_title                           String       @db.VarChar(100)
-  news_details                         String       @db.VarChar(2000)
-  news_created_at                      DateTime     @db.Date
-  news_updated_at                      DateTime     @db.Date
-  news_img                             String       @db.VarChar(250)
-  news_caption_img                     String?      @db.VarChar(100)
-  union_year                           Int
-  news_type_id                         String       @db.VarChar(10)
-  user_id                              String       @db.VarChar(20)
-  news_types                           news_types   @relation(fields: [news_type_id], references: [news_type_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_news_contents_news_types1")
-  union_year_news_contentsTounion_year union_year   @relation(fields: [union_year], references: [union_year], onDelete: NoAction, onUpdate: NoAction, map: "fk_news_contents_union_year1")
-  user_details                         user_details @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_news_contents_user_details1")
-
-  @@index([news_type_id], map: "fk_news_contents_news_types1_idx")
-  @@index([union_year], map: "fk_news_contents_union_year1_idx")
-  @@index([user_id], map: "fk_news_contents_user_details1_idx")
-}
-
-model news_types {
-  news_type_id   String          @id @db.VarChar(10)
-  news_type_name String          @db.VarChar(20)
-  news_contents  news_contents[]
-}
-
-model petition_types {
-  petition_type_id   String     @id @db.VarChar(10)
-  petition_type_name String     @db.VarChar(100)
-  petition           petition[]
 }
