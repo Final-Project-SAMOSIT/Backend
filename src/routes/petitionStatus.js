@@ -1,5 +1,4 @@
 require("dotenv").config()
-const express = require("express")
 const router = require('express').Router()
 const { PrismaClient } = require('@prisma/client')
 const petStatus = new PrismaClient().status

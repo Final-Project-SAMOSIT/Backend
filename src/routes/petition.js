@@ -3,6 +3,7 @@ const router = require('express').Router()
 const { PrismaClient } = require('@prisma/client')
 const authMiddleware = require('../middlewares/auth.middleware')
 const dayjs = require("dayjs")
+const { Role } = require("../constant/roleId")
 const petition = new PrismaClient().petition
 
 router.get("/getPetition", async (req, res) => {
@@ -60,7 +61,7 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
         let userTotal = await petition.findMany({
             where: {
                 user_id: user_id,
-                status_id: "1"
+                status_id: Role.ADMIN
             }
         })
 
