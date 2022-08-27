@@ -9,104 +9,119 @@ datasource db {
 }
 
 model admins {
-  admin_id   String @id @db.VarChar(40)
-  admin_user String @db.VarChar(50)
-  admin_pass String @db.VarChar(50)
-}
-
-model news {
-  new_id       String       @id @db.VarChar(40) @default(uuid())
-  new_topic    String       @db.VarChar(100)
-  new_details  String?      @db.VarChar(500)
-  new_date     DateTime     @db.Date
-  new_img      String       @db.VarChar(100)
-  user_id      String       @db.VarChar(20)
-  user_details user_details @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "news_user_details_fk")
-
-  @@index([user_id], map: "news_user_details_fk")
-}
-
-model pet_types {
-  pet_type_id   String     @id @db.VarChar(40)
-  pet_type_name String     @db.VarChar(100)
-  petition      petition[]
+  admin_user String @id @db.VarChar(20)
+  admin_pass String @db.VarChar(20)
 }
 
 model petition {
-  pet_id       String       @id @db.VarChar(40) @default(uuid())
-  pet_topic    String       @db.VarChar(100)
-  pet_details  String       @db.VarChar(500)
-  pet_date     DateTime     @db.DateTime(0)
-  user_id      String       @db.VarChar(20)
-  type_id      String       @db.VarChar(40)
-  status_id    String       @db.VarChar(40)
-  status       status       @relation(fields: [status_id], references: [status_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_status_fk")
-  pet_types    pet_types    @relation(fields: [type_id], references: [pet_type_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_types_fk")
-  user_details user_details @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_user_details_fk")
+  petition_id      Int            @id @default(autoincrement())
+  petition_topic   String         @db.VarChar(100)
+  petition_details String         @db.VarChar(500)
+  petition_date    DateTime       @db.Date
+  user_id          String         @db.VarChar(20)
+  petition_type_id String         @db.VarChar(10)
+  status_id        String         @db.VarChar(10)
+  petition_types   petition_types @relation(fields: [petition_type_id], references: [petition_type_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_types_fk")
+  status           status         @relation(fields: [status_id], references: [status_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_status_fk")
+  user_details     user_details   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_user_details_fk")
 
   @@index([status_id], map: "petition_status_fk")
-  @@index([type_id], map: "petition_types_fk")
+  @@index([petition_type_id], map: "petition_types_fk")
   @@index([user_id], map: "petition_user_details_fk")
 }
 
 model roles {
-  role_id      String         @id @db.VarChar(40)
+  role_id      String         @id @db.VarChar(10)
   role_name    String         @db.VarChar(20)
   user_details user_details[]
 }
 
 model status {
-  status_id          String     @id @db.VarChar(40)
+  status_id          String     @id @db.VarChar(10)
   status_name        String     @db.VarChar(50)
   status_description String?    @db.VarChar(100)
   petition           petition[]
 }
 
 model std_position {
-  position_id   String          @id @db.VarChar(40)
+  position_id   String          @id @db.VarChar(10)
   position_name String          @db.VarChar(50)
   student_union student_union[]
 }
 
 model student_union {
-  union_id           String             @id @db.VarChar(40)
-  std_id             String             @db.VarChar(20)
-  year_id            String             @db.VarChar(40)
-  position_id        String             @db.VarChar(40)
-  std_position       std_position       @relation(fields: [position_id], references: [position_id], onDelete: NoAction, onUpdate: NoAction, map: "student_union_position_fk")
-  student_union_info student_union_info @relation(fields: [std_id], references: [std_id], onDelete: NoAction, onUpdate: NoAction, map: "student_union_info_fk")
-  union_year         union_year         @relation(fields: [year_id], references: [year_id], onDelete: NoAction, onUpdate: NoAction, map: "student_union_year_fk")
+  union_id                             Int                @id @default(autoincrement())
+  std_id                               String             @db.VarChar(20)
+  union_year                           Int
+  position_id                          String             @db.VarChar(10)
+  std_position                         std_position       @relation(fields: [position_id], references: [position_id], onDelete: NoAction, onUpdate: NoAction, map: "student_union_position_fk")
+  student_union_info                   student_union_info @relation(fields: [std_id], references: [std_id], onDelete: NoAction, onUpdate: NoAction, map: "student_union_info_fk")
+  union_year_student_unionTounion_year union_year         @relation(fields: [union_year], references: [union_year], onDelete: NoAction, onUpdate: NoAction, map: "student_union_year_fk")
 
   @@index([std_id], map: "student_union_info_fk")
   @@index([position_id], map: "student_union_position_fk")
-  @@index([year_id], map: "student_union_year_fk")
+  @@index([union_year], map: "student_union_year_fk")
 }
 
 model student_union_info {
   std_id        String          @id @db.VarChar(20)
-  std_fname     String?         @db.VarChar(50)
-  std_lname     String?         @db.VarChar(50)
-  std_major     String?         @db.VarChar(50)
-  std_img       String          @db.VarChar(100)
+  std_fname_th  String          @db.VarChar(50)
+  std_lname_th  String          @db.VarChar(50)
+  std_fname_en  String          @db.VarChar(50)
+  std_lname_en  String          @db.VarChar(50)
+  std_major     String          @db.VarChar(50)
+  std_img       String          @db.VarChar(250)
   student_union student_union[]
 }
 
 model union_year {
-  year_id       String          @id @db.VarChar(40)
-  year_name     String          @db.VarChar(10)
+  union_year    Int             @id
+  news_contents news_contents[]
   student_union student_union[]
 }
 
 model user_details {
-  user_id   String     @id @db.VarChar(20)
-  user_type String?    @db.VarChar(20)
-  name_th   String?    @db.VarChar(50)
-  name_en   String?    @db.VarChar(50)
-  email     String?    @db.VarChar(50)
-  role_id   String     @db.VarChar(40)
-  roles     roles      @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "user_details_roles_fk")
-  news      news[]
-  petition  petition[]
+  user_id       String          @id @db.VarChar(20)
+  user_type     String?         @db.VarChar(20)
+  name_th       String?         @db.VarChar(50)
+  name_en       String?         @db.VarChar(50)
+  email         String?         @db.VarChar(50)
+  role_id       String          @db.VarChar(10)
+  roles         roles           @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "user_details_roles_fk")
+  news_contents news_contents[]
+  petition      petition[]
 
   @@index([role_id], map: "user_details_roles_fk")
+}
+
+model news_contents {
+  news_id                              Int          @id @default(autoincrement())
+  news_title                           String       @db.VarChar(100)
+  news_details                         String       @db.VarChar(2000)
+  news_created_at                      DateTime     @db.Date
+  news_updated_at                      DateTime     @db.Date
+  news_img                             String       @db.VarChar(250)
+  news_caption_img                     String?      @db.VarChar(100)
+  union_year                           Int
+  news_type_id                         String       @db.VarChar(10)
+  user_id                              String       @db.VarChar(20)
+  news_types                           news_types   @relation(fields: [news_type_id], references: [news_type_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_news_contents_news_types1")
+  union_year_news_contentsTounion_year union_year   @relation(fields: [union_year], references: [union_year], onDelete: NoAction, onUpdate: NoAction, map: "fk_news_contents_union_year1")
+  user_details                         user_details @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_news_contents_user_details1")
+
+  @@index([news_type_id], map: "fk_news_contents_news_types1_idx")
+  @@index([union_year], map: "fk_news_contents_union_year1_idx")
+  @@index([user_id], map: "fk_news_contents_user_details1_idx")
+}
+
+model news_types {
+  news_type_id   String          @id @db.VarChar(10)
+  news_type_name String          @db.VarChar(20)
+  news_contents  news_contents[]
+}
+
+model petition_types {
+  petition_type_id   String     @id @db.VarChar(10)
+  petition_type_name String     @db.VarChar(100)
+  petition           petition[]
 }

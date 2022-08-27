@@ -28,3 +28,7 @@ app.use(cors({
 app.options('*', cors())
 
 app.use(require('./routes'))
+
+process.on('uncaughtException', error => {
+  console.log(error)
+})
