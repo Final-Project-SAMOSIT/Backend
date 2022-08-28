@@ -30,7 +30,7 @@ router.post('/auth', async (req, res) => {
         user = await userDetails.create({ data: { user_id: user.user_id, user_type: user.user_type, name_th: user.name_th, name_en: user.name_en, email: user.email, role_id: `${user.roles[0].role_id}` } })
     }
     if (userInDb) {
-        user = await userDetails.update({ where: user.user_id, data: { user_type: user.user_type, name_th: user.name_th, name_en: user.name_en, email: user.email } })
+        user = await userDetails.update({ where: { user_id: user.user_id }, data: { user_type: user.user_type, name_th: user.name_th, name_en: user.name_en, email: user.email } })
     }
     return res.status(200).send({ data: { ...user, token: { token: accessToken } } })
 })
