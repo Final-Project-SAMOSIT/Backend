@@ -11,7 +11,8 @@ router.post('/auth', async (req, res) => {
     const redirectURI = process.env.REDIRECT_URI
     if (!clientSecret) {
         throw new Error("require client secret in BE env")
-    }
+    } 
+    
     let user
     try {
         user = await axios.get(`https://gatewayservice.sit.kmutt.ac.th/api/oauth/token?client_secret=${clientSecret}&client_id=${clientId}&code=${code}&redirect_uri=${redirectURI}`)
