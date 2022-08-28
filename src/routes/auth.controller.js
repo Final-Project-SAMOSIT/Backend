@@ -1,6 +1,6 @@
-const { PrismaClient } = require('@prisma/client')
+const { Prisma } = require('../constant/prisma')
 const authMiddleware = require('../middlewares/auth.middleware')
-const { user_details: userDetails } = new PrismaClient()
+const { user_details: userDetails } = Prisma
 const axios = require("axios").default
 const router = require('express').Router()
 
@@ -16,7 +16,6 @@ router.post('/auth', async (req, res) => {
     try {
         user = await axios.get(`https://gatewayservice.sit.kmutt.ac.th/api/oauth/token?client_secret=${clientSecret}&client_id=${clientId}&code=${code}&redirect_uri=${redirectURI}`)
     } catch (error) {
-        // console.log("🚀 ~ file: auth.controller.js ~ line 17 ~ router.post ~ error", error)
         return res.status(error.response.status).send({ msg: error.response.data.message })
     }
     user = user.data
@@ -31,32 +30,22 @@ router.post('/auth', async (req, res) => {
         user = await userDetails.create({ data: { user_id: user.user_id, user_type: user.user_type, name_th: user.name_th, name_en: user.name_en, email: user.email, role_id: `${user.roles[0].role_id}` } })
     }
     if (userInDb) {
-        user = userInDb
+        user = await userDetails.update({ where: user.user_id, data: { user_type: user.user_type, name_th: user.name_th, name_en: user.name_en, email: user.email } })
     }
     return res.status(200).send({ data: { ...user, token: { token: accessToken } } })
 })
 
-// router.get("/auth/redirect", async (req, res) => {
-//     let { code } = req.query
-//     let result
-//     try {
-//         result = await authService.handleRedirect(code)
-//     } catch (error) {
-//         return res.status(400).send({ msg: error.message })
-//     }
-//     return res.send({ userDetail: result })
-// })
-
 router.get("/auth/check", authMiddleware, async (req, res) => {
     let { user_id } = req.user
     let userInDB = await userDetails.findUnique(
-        { where: 
-            { 
-                user_id: user_id 
+        {
+            where:
+            {
+                user_id: user_id
             },
-            include:{
+            include: {
                 roles: true
-            } 
+            }
         })
     try {
         if (userInDB == undefined || userInDB.length < 0) {
