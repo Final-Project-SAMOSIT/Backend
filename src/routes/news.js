@@ -32,8 +32,8 @@ router.get("/getNews", async (req, res) => {
                 news_img: true,
                 news_types: true
             },
-            take: take,
-            skip: skip
+            take: Number(take),
+            skip: Number(skip)
         })
         countDocument = await news.count({
             where: {
