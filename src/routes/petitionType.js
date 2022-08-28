@@ -1,7 +1,7 @@
 require("dotenv").config()
 const router = require('express').Router()
 const { Prisma } = require("../constant/prisma")
-const { pet_types: petType } = Prisma
+const { petition_types: petType } = Prisma
 
 router.get("/getPetitionType", async (req, res) => {
     let test = await petType.findMany()

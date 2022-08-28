@@ -11,10 +11,10 @@ router.get("/getPetition", async (req, res) => {
         let test = await petition.findMany({
             include: {
                 status: true,
-                pet_types: true
+                petition_types: true
             },
             orderBy: {
-                pet_date: "asc"
+                petition_date: "asc"
             }
         })
         if (test == undefined || test.length < 0) {
@@ -36,16 +36,16 @@ router.get("/getPetition/:userId", async (req, res) => {
                 user_id: userId
             },
             include: {
-                pet_types: true,
+                petition_types: true,
                 status: true
             },
             orderBy: {
-                pet_date: "desc"
+                petition_date: "desc"
             }
         })
 
         if (result == undefined || result.length < 0) {
-            return res.status(400).send({ status: "Don't have any data" })
+            return res.status(204).send({ status: "Don't have any data" })
         }
         return res.send({ data: result })
 
@@ -71,11 +71,11 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
 
         let result = await petition.create({
             data: {
-                pet_topic: pet_topic,
-                pet_details: pet_details,
-                pet_date: dayjs().toDate(),
+                petition_topic: pet_topic,
+                petition_details: pet_details,
+                petition_date: dayjs().toDate(),
                 user_id: user_id,
-                type_id: type_id,
+                petition_type_id: type_id,
                 status_id: "1"
             }
         })
@@ -88,7 +88,7 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
 
 router.put("/editStatusPetition/:id", async (req, res) => {
     try {
-        let petId = String(req.params.id)
+        let { id: petId = 0 } = req.params
         let { status } = req.body
         let status_id = ""
         switch (status) {
@@ -113,7 +113,7 @@ router.put("/editStatusPetition/:id", async (req, res) => {
 
         let updateStatus = await petition.update({
             where: {
-                pet_id: petId
+                petition_id: Number(petId)
             },
             data: {
                 status_id: status_id
@@ -128,10 +128,10 @@ router.put("/editStatusPetition/:id", async (req, res) => {
 
 router.delete("/deletePetition/:id", async (req, res) => {
     try {
-        let petId = String(req.params.id)
+        let { id: petId = 0 } = req.params
         let result = await petition.delete({
             where: {
-                pet_id: petId
+                petition_id: Number(petId)
             }
         })
 

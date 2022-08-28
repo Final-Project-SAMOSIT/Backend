@@ -9,6 +9,8 @@ const { NEW_TYPE } = require("../constant/newTypeId")
 
 router.get("/getNews", async (req, res) => {
     let results = []
+    let { take = 3, skip = 0 } = req.query
+    let countDocument = 0
     try {
         results = await news.findMany({
             where: {
@@ -29,12 +31,19 @@ router.get("/getNews", async (req, res) => {
                 news_updated_at: true,
                 news_img: true,
                 news_types: true
+            },
+            take: take,
+            skip: skip
+        })
+        countDocument = await news.count({
+            where: {
+                news_type_id: NEW_TYPE.NEWS_AND_EXPERIENCE
             }
         })
     } catch (error) {
         return res.status(400).send({ error: error.message })
     }
-    return res.send({ data: results })
+    return res.send({ data: results, allItem: countDocument, take: take, skip: skip })
 })
 
 router.get("/getNews/:id", async (req, res) => {
