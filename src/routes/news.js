@@ -1,8 +1,7 @@
 require("dotenv").config()
 const router = require('express').Router()
-const { PrismaClient, prisma } = require('@prisma/client')
-const { Role } = require("../constant/roleId")
-const { news_contents: news } = new PrismaClient()
+const { Prisma } = require("../constant/prisma")
+const { news_contents: news } = Prisma
 const authMiddleware = require('../middlewares/auth.middleware')
 const onlyPublisher = require("../middlewares/onlyPublisher")
 const { v4: uuid } = require("uuid")
@@ -28,27 +27,26 @@ router.get("/getNews", async (req, res) => {
                 news_details: true,
                 news_created_at: true,
                 news_updated_at: true,
-                news_img: true
+                news_img: true,
+                news_types: true
             }
         })
     } catch (error) {
-        // console.log("🚀 ~ file: news.js ~ line 32 ~ router.get ~ error", error)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: results })
 })
 
 router.get("/getNews/:id", async (req, res) => {
-    let { id } = req.params
+    let { id = 0 } = req.params
     let result = {}
     try {
         result = await news.findFirst({
             where: {
-                news_id: id
+                news_id: Number(id)
             }
         })
     } catch (error) {
-        // console.log("🚀 ~ file: news.js ~ line 47 ~ router.get ~ error", error)
         return res.status(400).send({ error: error.message })
     }
     if (!result) {
@@ -103,13 +101,13 @@ router.patch("/editNews/:id", authMiddleware, onlyPublisher, async (req, res) =>
 })
 
 router.delete("/deleteNews/:id", authMiddleware, onlyPublisher, async (req, res) => {
-    let { id: news_id } = req.params
+    let { id: news_id = 0 } = req.params
 
     let result
     try {
         result = await news.delete({
             where: {
-                news_id: news_id
+                news_id: Number(news_id)
             },
         })
     } catch (error) {
@@ -136,7 +134,6 @@ router.get("/getExperiences", async (req, res) => {
             }
         })
     } catch (error) {
-        // console.log("🚀 ~ file: news.js ~ line 139 ~ router.get ~ error", error)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: result, allItem: countDocument, take: take, skip: skip })

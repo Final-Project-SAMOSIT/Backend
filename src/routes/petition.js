@@ -1,10 +1,10 @@
 require("dotenv").config()
 const router = require('express').Router()
-const { PrismaClient } = require('@prisma/client')
 const authMiddleware = require('../middlewares/auth.middleware')
 const dayjs = require("dayjs")
 const { Role } = require("../constant/roleId")
-const petition = new PrismaClient().petition
+const { Prisma } = require("../constant/prisma")
+const { petition } = Prisma
 
 router.get("/getPetition", async (req, res) => {
     try {
@@ -25,7 +25,7 @@ router.get("/getPetition", async (req, res) => {
     } catch (error) {
         return res.status(400).send({ status: "Don't have any data", message: error.message })
     }
-    
+
 })
 
 router.get("/getPetition/:userId", async (req, res) => {

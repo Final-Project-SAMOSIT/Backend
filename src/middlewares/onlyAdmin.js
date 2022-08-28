@@ -12,8 +12,8 @@ module.exports = async function (req, res, next) {
             roles: true
         }
     })
-    if (userInDB.role_id != Role.PUBLISHER) {
-        return res.status(401).send({ msg: "USER OR ADMIN not Authorization" })
+    if (userInDB.role_id != Role.ADMIN) {
+        return res.status(401).send({ msg: "Only Admin for authorizaion" })
     }
     next()
 }
