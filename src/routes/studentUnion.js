@@ -14,11 +14,11 @@ router.get("/getAllStdUnion", async (req, res) => {
 
 router.get("/getStudentUnion", async (req, res) => {
     let results = []
-    let { union_year } = req.params
+    let { union_year = 0 } = req.query
     try {
         results = await student_union.findMany({
             where: {
-                union_year: union_year
+                union_year: Number(union_year)
             },
             include: {
                 student_union_info: true,
