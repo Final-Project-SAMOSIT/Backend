@@ -47,12 +47,12 @@ router.get("/getNews", async (req, res) => {
 })
 
 router.get("/getNews/:id", async (req, res) => {
-    let { id = 0 } = req.params
+    let { id } = req.params
     let result = {}
     try {
         result = await news.findFirst({
             where: {
-                news_id: Number(id)
+                news_id: id
             }
         })
     } catch (error) {
@@ -68,7 +68,6 @@ router.post("/addNews", authMiddleware, onlyPublisher, async (req, res) => {
     let { user, body } = req
     let { news_title, news_details, news_img, news_caption_img, union_year, news_type_id } = body
     let newsBody = {
-        news_id: uuid(),
         news_title: news_title,
         news_details: news_details,
         news_created_at: new Date(),
@@ -110,13 +109,13 @@ router.patch("/editNews/:id", authMiddleware, onlyPublisher, async (req, res) =>
 })
 
 router.delete("/deleteNews/:id", authMiddleware, onlyPublisher, async (req, res) => {
-    let { id: news_id = 0 } = req.params
+    let { id: news_id } = req.params
 
     let result
     try {
         result = await news.delete({
             where: {
-                news_id: Number(news_id)
+                news_id: news_id
             },
         })
     } catch (error) {
@@ -132,14 +131,28 @@ router.get("/getExperiences", async (req, res) => {
     try {
         result = await news.findMany({
             where: {
-                news_type_id: NEW_TYPE.NEWS_AND_EXPERIENCE
+                OR: [
+                    {
+                        news_type_id: NEW_TYPE.NEWS_AND_EXPERIENCE
+                    },
+                    {
+                        news_type_id: NEW_TYPE.EXPERIENCE
+                    }
+                ]
             },
             take: Number(take),
             skip: Number(skip)
         })
         countDocument = await news.count({
             where: {
-                news_type_id: NEW_TYPE.NEWS_AND_EXPERIENCE
+                OR: [
+                    {
+                        news_type_id: NEW_TYPE.NEWS_AND_EXPERIENCE
+                    },
+                    {
+                        news_type_id: NEW_TYPE.EXPERIENCE
+                    }
+                ]
             }
         })
     } catch (error) {

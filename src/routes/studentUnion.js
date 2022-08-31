@@ -46,12 +46,12 @@ router.post('/createStudentUnion', async (req, res) => {
 
 router.patch('/editStudentUnion/:id', async (req, res) => {
     let { body } = req
-    let { id = 0 } = req.params
+    let { id } = req.params
     let result
     try {
         result = await student_union.update({
             where: {
-                union_id: Number(id)
+                union_id: id
             },
             data: {
                 std_id: body.std_id,
@@ -66,12 +66,12 @@ router.patch('/editStudentUnion/:id', async (req, res) => {
 })
 
 router.delete('/deleteStudentUnion/:id', async (req, res) => {
-    let { id = 0 } = req.params
+    let { id } = req.params
     let result
     try {
         result = await student_union.delete({
             where: {
-                union_id: Number(id)
+                union_id: id
             },
         })
     } catch (error) {

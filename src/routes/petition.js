@@ -30,7 +30,7 @@ router.get("/getPetition", async (req, res) => {
 
 router.get("/getPetition/:userId", async (req, res) => {
     try {
-        let userId = String(req.params.userId)
+        let { userId: userId } = req.params
         let result = await petition.findMany({
             where: {
                 user_id: userId
@@ -88,7 +88,7 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
 
 router.put("/editStatusPetition/:id", async (req, res) => {
     try {
-        let { id: petId = 0 } = req.params
+        let { id: petId } = req.params
         let { status } = req.body
         let status_id = ""
         switch (status) {
@@ -113,7 +113,7 @@ router.put("/editStatusPetition/:id", async (req, res) => {
 
         let updateStatus = await petition.update({
             where: {
-                petition_id: Number(petId)
+                petition_id: petId
             },
             data: {
                 status_id: status_id
@@ -128,10 +128,10 @@ router.put("/editStatusPetition/:id", async (req, res) => {
 
 router.delete("/deletePetition/:id", async (req, res) => {
     try {
-        let { id: petId = 0 } = req.params
+        let { id: petId } = req.params
         let result = await petition.delete({
             where: {
-                petition_id: Number(petId)
+                petition_id: petId
             }
         })
 

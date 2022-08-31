@@ -8,15 +8,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model admins {
-  admin_user String @id @db.VarChar(20)
-  admin_pass String @db.VarChar(20)
-}
-
 model news_contents {
-  news_id                              Int          @id @default(autoincrement())
+  news_id                              String       @id @default(uuid()) @db.VarChar(40)
   news_title                           String       @db.VarChar(100)
-  news_details                         String       @db.VarChar(2000)
+  news_details                         String       @db.VarChar(5000)
   news_created_at                      DateTime     @db.Date
   news_updated_at                      DateTime     @db.Date
   news_img                             String       @db.VarChar(250)
@@ -40,15 +35,15 @@ model news_types {
 }
 
 model petition {
-  petition_id      Int            @id @default(autoincrement())
+  petition_id      String         @id @default(uuid()) @db.VarChar(40)
   petition_topic   String         @db.VarChar(100)
   petition_details String         @db.VarChar(500)
   petition_date    DateTime       @db.Date
   user_id          String         @db.VarChar(20)
   petition_type_id String         @db.VarChar(10)
   status_id        String         @db.VarChar(10)
-  petition_types   petition_types @relation(fields: [petition_type_id], references: [petition_type_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_types_fk")
   status           status         @relation(fields: [status_id], references: [status_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_status_fk")
+  petition_types   petition_types @relation(fields: [petition_type_id], references: [petition_type_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_types_fk")
   user_details     user_details   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_user_details_fk")
 
   @@index([status_id], map: "petition_status_fk")
@@ -82,12 +77,12 @@ model std_position {
 }
 
 model student_union {
-  union_id                             Int                @id @default(autoincrement())
+  union_id                             String             @id @default(uuid()) @db.VarChar(40)
   std_id                               String             @db.VarChar(20)
   union_year                           Int
   position_id                          String             @db.VarChar(10)
-  std_position                         std_position       @relation(fields: [position_id], references: [position_id], onDelete: NoAction, onUpdate: NoAction, map: "student_union_position_fk")
   student_union_info                   student_union_info @relation(fields: [std_id], references: [std_id], onDelete: NoAction, onUpdate: NoAction, map: "student_union_info_fk")
+  std_position                         std_position       @relation(fields: [position_id], references: [position_id], onDelete: NoAction, onUpdate: NoAction, map: "student_union_position_fk")
   union_year_student_unionTounion_year union_year         @relation(fields: [union_year], references: [union_year], onDelete: NoAction, onUpdate: NoAction, map: "student_union_year_fk")
 
   @@index([std_id], map: "student_union_info_fk")
@@ -101,9 +96,15 @@ model student_union_info {
   std_lname_th  String          @db.VarChar(50)
   std_fname_en  String          @db.VarChar(50)
   std_lname_en  String          @db.VarChar(50)
-  std_major     String          @db.VarChar(50)
+  std_major     STUDENT_MAJOR
   std_img       String          @db.VarChar(250)
   student_union student_union[]
+}
+
+enum STUDENT_MAJOR {
+  IT
+  CS
+  DSI
 }
 
 model union_year {
