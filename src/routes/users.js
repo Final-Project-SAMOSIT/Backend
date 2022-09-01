@@ -8,7 +8,7 @@ let { user_details: users, roles } = Prisma
 router.get("/getUsers", async (req, res) => {
     let results = await users.findMany()
     if (results == undefined || results.length < 0) {
-        return res.status(400).send({ status: "Don't have any data" })
+        return res.status(204).send({ status: "Don't have any data" })
     }
     return res.send({ data: results })
 })
