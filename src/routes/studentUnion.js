@@ -2,7 +2,7 @@ const router = require('express').Router()
 const { Prisma } = require('../constant/prisma')
 const { student_union, union_year } = Prisma
 
-router.get("/getAllStdUnion", async (req, res) => {
+router.get("/getAllUnionYear", async (req, res) => {
     let results = []
     try {
         results = await union_year.findMany()
