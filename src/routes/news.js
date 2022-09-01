@@ -125,7 +125,7 @@ router.delete("/deleteNews/:id", authMiddleware, onlyPublisher, async (req, res)
 })
 
 router.get("/getExperiences", async (req, res) => {
-    let { take = 3, skip = 0 } = req.query
+    let { take = 3, skip = 0, unionYear } = req.query
     let result = []
     let countDocument = 0
     try {
@@ -138,7 +138,8 @@ router.get("/getExperiences", async (req, res) => {
                     {
                         news_type_id: NEW_TYPE.EXPERIENCE
                     }
-                ]
+                ],
+                union_year: Number(unionYear)
             },
             take: Number(take),
             skip: Number(skip)
