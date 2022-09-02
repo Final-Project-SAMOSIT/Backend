@@ -96,15 +96,8 @@ model student_union_info {
   std_lname_th  String          @db.VarChar(50)
   std_fname_en  String          @db.VarChar(50)
   std_lname_en  String          @db.VarChar(50)
-  std_major     STUDENT_MAJOR
   std_img       String          @db.VarChar(250)
   student_union student_union[]
-}
-
-enum STUDENT_MAJOR {
-  IT
-  CS
-  DSI
 }
 
 model union_year {
