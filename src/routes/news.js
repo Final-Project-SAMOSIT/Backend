@@ -52,6 +52,14 @@ router.get("/getNews/:id", async (req, res) => {
     try {
         result = await news.findFirst({
             where: {
+                OR: [
+                    {
+                        news_type_id: NEW_TYPE.NEWS
+                    },
+                    {
+                        news_type_id: NEW_TYPE.NEWS_AND_EXPERIENCE
+                    }
+                ],
                 news_id: id
             }
         })
@@ -160,6 +168,32 @@ router.get("/getExperiences", async (req, res) => {
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: result, allItem: countDocument, take: take, skip: skip })
+})
+
+router.get("/getExperiences/:id", async (req, res) => {
+    let { id } = req.params
+    let result = {}
+    try {
+        result = await news.findFirst({
+            where: {
+                OR: [
+                    {
+                        news_type_id: NEW_TYPE.NEWS_AND_EXPERIENCE
+                    },
+                    {
+                        news_type_id: NEW_TYPE.EXPERIENCE
+                    }
+                ],
+                news_id: id
+            }
+        })
+    } catch (error) {
+        return res.status(400).send({ error: error.message })
+    }
+    if (!result) {
+        result = {}
+    }
+    return res.send({ data: result })
 })
 
 module.exports = router
