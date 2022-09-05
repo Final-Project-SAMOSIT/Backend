@@ -7,6 +7,7 @@ const petition = require('./petition')
 const news = require("./news")
 const uploadFile = require("./uploadFile")
 const studentUnion = require("./studentUnion")
+const newsType = require("./newsType")
 
 router.use(authController)
 router.use(petitionType)
@@ -16,6 +17,7 @@ router.use(petition)
 router.use(news)
 router.use(uploadFile)
 router.use(studentUnion)
+router.use(newsType)
 
 router.get("/", (req, res) => {
     return res.send({ api: "SAMOSIT" })

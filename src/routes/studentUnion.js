@@ -5,7 +5,13 @@ const { student_union, union_year } = Prisma
 router.get("/getAllUnionYear", async (req, res) => {
     let results = []
     try {
-        results = await union_year.findMany()
+        results = await union_year.findMany({
+            where: {
+                NOT:{
+                    union_year:9999
+                }
+            }
+        })
     } catch (error) {
         return res.status(400).send({ error: error.message })
     }
