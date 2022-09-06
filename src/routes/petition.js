@@ -73,7 +73,7 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
             data: {
                 petition_topic: pet_topic,
                 petition_details: pet_details,
-                petition_date: dayjs().toDate(),
+                petition_date: dayjs().add(7, 'hour').toDate(),
                 user_id: user_id,
                 petition_type_id: type_id,
                 status_id: "1"

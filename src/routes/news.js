@@ -4,8 +4,8 @@ const { Prisma } = require("../constant/prisma")
 const { news_contents: news } = Prisma
 const authMiddleware = require('../middlewares/auth.middleware')
 const onlyPublisher = require("../middlewares/onlyPublisher")
-const { v4: uuid } = require("uuid")
 const { NEW_TYPE } = require("../constant/newTypeId")
+const dayjs = require("dayjs")
 
 router.get("/getNews", async (req, res) => {
     let results = []
@@ -33,7 +33,10 @@ router.get("/getNews", async (req, res) => {
                 news_types: true
             },
             take: Number(take),
-            skip: Number(skip)
+            skip: Number(skip),
+            orderBy: {
+                news_created_at: "desc"
+            }
         })
         countDocument = await news.count({
             where: {
@@ -78,8 +81,8 @@ router.post("/addNews", authMiddleware, onlyPublisher, async (req, res) => {
     let newsBody = {
         news_title: news_title,
         news_details: news_details,
-        news_created_at: new Date(),
-        news_updated_at: new Date(),
+        news_created_at: dayjs().add(7, 'hour').toDate(),
+        news_updated_at: dayjs().add(7, 'hour').toDate(),
         news_img: news_img,
         news_caption_img: news_caption_img,
         union_year: union_year,
@@ -108,7 +111,7 @@ router.patch("/editNews/:id", authMiddleware, onlyPublisher, async (req, res) =>
             where: {
                 news_id: news_id
             },
-            data: { ...body, news_updated_at: new Date() }
+            data: { ...body, news_updated_at: dayjs().add(7, 'hour').toDate() }
         })
     } catch (error) {
         return res.status(400).send({ error: error.message })
@@ -150,7 +153,10 @@ router.get("/getExperiences", async (req, res) => {
                 union_year: Number(union_year)
             },
             take: Number(take),
-            skip: Number(skip)
+            skip: Number(skip),
+            orderBy:{
+                news_created_at: "desc"
+            }
         })
         countDocument = await news.count({
             where: {

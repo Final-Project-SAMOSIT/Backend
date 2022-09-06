@@ -12,8 +12,8 @@ model news_contents {
   news_id                              String       @id @default(uuid()) @db.VarChar(40)
   news_title                           String       @db.VarChar(100)
   news_details                         String       @db.VarChar(5000)
-  news_created_at                      DateTime     @db.Date
-  news_updated_at                      DateTime     @db.Date
+  news_created_at                      DateTime     @db.DateTime(0)
+  news_updated_at                      DateTime     @db.DateTime(0)
   news_img                             String       @db.VarChar(250)
   news_caption_img                     String?      @db.VarChar(100)
   union_year                           Int
@@ -38,7 +38,7 @@ model petition {
   petition_id      String         @id @default(uuid()) @db.VarChar(40)
   petition_topic   String         @db.VarChar(100)
   petition_details String         @db.VarChar(500)
-  petition_date    DateTime       @db.Date
+  petition_date    DateTime       @db.DateTime(0)
   user_id          String         @db.VarChar(20)
   petition_type_id String         @db.VarChar(10)
   status_id        String         @db.VarChar(10)
