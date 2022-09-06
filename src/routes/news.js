@@ -43,7 +43,14 @@ router.get("/getNews", async (req, res) => {
         })
         countDocument = await news.count({
             where: {
-                news_type_id: NEW_TYPE.NEWS_AND_EXPERIENCE
+                OR: [
+                    {
+                        news_type_id: NEW_TYPE.NEWS
+                    },
+                    {
+                        news_type_id: NEW_TYPE.NEWS_AND_EXPERIENCE
+                    }
+                ]
             }
         })
     } catch (error) {
