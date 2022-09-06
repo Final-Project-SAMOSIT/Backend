@@ -56,7 +56,7 @@ router.get("/getNews", async (req, res) => {
     } catch (error) {
         return res.status(400).send({ error: error.message })
     }
-    return res.send({ data: results, allItem: countDocument, take: take, skip: skip })
+    return res.send({ data: results, allItem: countDocument, take: take, skip: skip }) 
 })
 
 router.get("/getNews/:id", async (req, res) => {
