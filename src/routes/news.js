@@ -9,11 +9,14 @@ const dayjs = require("dayjs")
 
 router.get("/getNews", async (req, res) => {
     let results = []
-    let { take = 3, skip = 0 } = req.query
+    let { take = 3, skip = 0, news_id} = req.query
     let countDocument = 0
     try {
         results = await news.findMany({
             where: {
+                NOT:{
+                    news_id:news_id
+                },
                 OR: [
                     {
                         news_type_id: NEW_TYPE.NEWS
@@ -136,12 +139,15 @@ router.delete("/deleteNews/:id", authMiddleware, onlyPublisher, async (req, res)
 })
 
 router.get("/getExperiences", async (req, res) => {
-    let { take = 3, skip = 0, union_year } = req.query
+    let { take = 3, skip = 0, union_year, news_id } = req.query
     let result = []
     let countDocument = 0
     try {
         result = await news.findMany({
             where: {
+                NOT:{
+                    news_id:news_id
+                },
                 OR: [
                     {
                         news_type_id: NEW_TYPE.NEWS_AND_EXPERIENCE
