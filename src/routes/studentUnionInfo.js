@@ -26,7 +26,14 @@ router.post('/createStudentUnionInfo', async (req, res) => {
     let result
     try {
         result = await student_union_info.create({
-            data: body
+            data: {
+                std_id: body.std_id,
+                std_fname_th: body.std_fname_th,
+                std_lname_th: body.std_lname_th,
+                std_fname_en: body.std_fname_en,
+                std_lname_en: body.std_lname_en,
+                std_img: body.std_img
+            }
         })
     } catch (error) {
         return res.status(400).send({ error: error.message })
