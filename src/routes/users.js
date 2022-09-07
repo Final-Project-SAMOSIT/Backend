@@ -1,7 +1,8 @@
 require("dotenv").config()
 const router = require('express').Router()
 const { Prisma } = require("../constant/prisma")
-const onlyAdmin = require("../middlewares/onlyAdmin")
+const { Role } = require("../constant/roleId")
+const roleAuth = require("../middlewares/role.middleware")
 const authMiddleware = require('../middlewares/auth.middleware')
 let { user_details: users, roles } = Prisma
 
@@ -23,7 +24,7 @@ router.get('/allRole', async (req, res) => {
     return res.send({ data: results })
 })
 
-router.patch('/updateUser/:id', authMiddleware, onlyAdmin, async (req, res) => {
+router.patch('/updateUser/:id', authMiddleware, roleAuth([Role.ADMIN]), async (req, res) => {
     let { id } = req.params
     let { body } = req
     let results

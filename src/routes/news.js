@@ -3,19 +3,20 @@ const router = require('express').Router()
 const { Prisma } = require("../constant/prisma")
 const { news_contents: news } = Prisma
 const authMiddleware = require('../middlewares/auth.middleware')
-const onlyPublisher = require("../middlewares/onlyPublisher")
+const { Role } = require("../constant/roleId")
+const roleAuth = require("../middlewares/role.middleware")
 const { NEW_TYPE } = require("../constant/newTypeId")
 const dayjs = require("dayjs")
 
 router.get("/getNews", async (req, res) => {
     let results = []
-    let { take = 3, skip = 0, news_id} = req.query
+    let { take = 3, skip = 0, news_id } = req.query
     let countDocument = 0
     try {
         results = await news.findMany({
             where: {
-                NOT:{
-                    news_id:news_id
+                NOT: {
+                    news_id: news_id
                 },
                 OR: [
                     {
@@ -56,7 +57,7 @@ router.get("/getNews", async (req, res) => {
     } catch (error) {
         return res.status(400).send({ error: error.message })
     }
-    return res.send({ data: results, allItem: countDocument, take: take, skip: skip }) 
+    return res.send({ data: results, allItem: countDocument, take: take, skip: skip })
 })
 
 router.get("/getNews/:id", async (req, res) => {
@@ -85,7 +86,7 @@ router.get("/getNews/:id", async (req, res) => {
     return res.send({ data: result })
 })
 
-router.post("/addNews", authMiddleware, onlyPublisher, async (req, res) => {
+router.post("/addNews", authMiddleware, roleAuth([Role.PUBLISHER]), async (req, res) => {
     let { user, body } = req
     let { news_title, news_details, news_img, news_caption_img, union_year, news_type_id } = body
     let newsBody = {
@@ -111,7 +112,7 @@ router.post("/addNews", authMiddleware, onlyPublisher, async (req, res) => {
     return res.send({ data: result })
 })
 
-router.patch("/editNews/:id", authMiddleware, onlyPublisher, async (req, res) => {
+router.patch("/editNews/:id", authMiddleware, roleAuth([Role.PUBLISHER]), async (req, res) => {
     let { body } = req
     let { id: news_id } = req.params
 
@@ -129,7 +130,7 @@ router.patch("/editNews/:id", authMiddleware, onlyPublisher, async (req, res) =>
     return res.send({ data: result })
 })
 
-router.delete("/deleteNews/:id", authMiddleware, onlyPublisher, async (req, res) => {
+router.delete("/deleteNews/:id", authMiddleware, roleAuth([Role.PUBLISHER]), async (req, res) => {
     let { id: news_id } = req.params
 
     let result
@@ -152,8 +153,8 @@ router.get("/getExperiences", async (req, res) => {
     try {
         result = await news.findMany({
             where: {
-                NOT:{
-                    news_id:news_id
+                NOT: {
+                    news_id: news_id
                 },
                 OR: [
                     {
@@ -167,7 +168,7 @@ router.get("/getExperiences", async (req, res) => {
             },
             take: Number(take),
             skip: Number(skip),
-            orderBy:{
+            orderBy: {
                 news_created_at: "desc"
             }
         })
