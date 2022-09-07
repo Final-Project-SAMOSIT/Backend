@@ -92,8 +92,8 @@ router.post("/addNews", authMiddleware, roleAuth([Role.PUBLISHER]), async (req, 
     let newsBody = {
         news_title: news_title,
         news_details: news_details,
-        news_created_at: dayjs().add(7, 'hour').toDate(),
-        news_updated_at: dayjs().add(7, 'hour').toDate(),
+        news_created_at: dayjs().toDate(),
+        news_updated_at: dayjs().toDate(),
         news_img: news_img,
         news_caption_img: news_caption_img,
         union_year: union_year,
@@ -122,7 +122,7 @@ router.patch("/editNews/:id", authMiddleware, roleAuth([Role.PUBLISHER]), async 
             where: {
                 news_id: news_id
             },
-            data: { ...body, news_updated_at: dayjs().add(7, 'hour').toDate() }
+            data: { ...body, news_updated_at: dayjs().toDate() }
         })
     } catch (error) {
         return res.status(400).send({ error: error.message })

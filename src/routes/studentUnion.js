@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const { Prisma } = require('../constant/prisma')
-const { student_union, union_year } = Prisma
+const { student_union, union_year,student_union_info } = Prisma
 
 router.get("/getAllUnionYear", async (req, res) => {
     let results = []
@@ -71,6 +71,7 @@ router.patch('/editStudentUnion/:id', async (req, res) => {
     return res.send({ data: result })
 })
 
+
 router.delete('/deleteStudentUnion/:id', async (req, res) => {
     let { id } = req.params
     let result
@@ -85,5 +86,6 @@ router.delete('/deleteStudentUnion/:id', async (req, res) => {
     }
     return res.send({ data: result })
 })
+
 
 module.exports = router
