@@ -1,14 +1,14 @@
 const router = require('express').Router()
 const { Prisma } = require('../constant/prisma')
-const { student_union, union_year,student_union_info } = Prisma
+const { student_union, union_year, student_union_info } = Prisma
 
 router.get("/getAllUnionYear", async (req, res) => {
     let results = []
     try {
         results = await union_year.findMany({
             where: {
-                NOT:{
-                    union_year:9999
+                NOT: {
+                    union_year: 9999
                 }
             }
         })
@@ -41,10 +41,11 @@ router.post('/createStudentUnion', async (req, res) => {
     let { body } = req
     let result
     try {
-        result = await student_union.create({
+        result = await student_union.createMany({
             data: body
         })
     } catch (error) {
+        console.log(error);
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: result })
