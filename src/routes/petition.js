@@ -29,7 +29,7 @@ router.get("/getPetition", async (req, res) => {
 })
 
 router.get("/getPetition/:userId", async (req, res) => {
-    try {
+    try { 
         let { userId: userId } = req.params
         let result = await petition.findMany({
             where: {
