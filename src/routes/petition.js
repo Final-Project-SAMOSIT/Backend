@@ -56,7 +56,7 @@ router.get("/getPetition/:userId", async (req, res) => {
 
 router.post("/addPetition", authMiddleware, async (req, res) => {
     try {
-        let { pet_topic, pet_details, type_id } = req.body
+        let { petition_topic, petition_details, petition_type_id } = req.body
         let { user_id } = req.user
         let userTotal = await petition.findMany({
             where: {
@@ -71,11 +71,11 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
 
         let result = await petition.create({
             data: {
-                petition_topic: pet_topic,
-                petition_details: pet_details,
+                petition_topic: petition_topic,
+                petition_details: petition_details,
                 petition_date: dayjs().add(7, 'hour').toDate(),
                 user_id: user_id,
-                petition_type_id: type_id,
+                petition_type_id: petition_type_id,
                 status_id: "1"
             }
         })
@@ -88,7 +88,7 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
 
 router.put("/editStatusPetition/:id", async (req, res) => {
     try {
-        let { id: petId } = req.params
+        let { id: petition_id } = req.params
         let { status } = req.body
         let status_id = ""
         switch (status) {
@@ -113,7 +113,7 @@ router.put("/editStatusPetition/:id", async (req, res) => {
 
         let updateStatus = await petition.update({
             where: {
-                petition_id: petId
+                petition_id: petition_id
             },
             data: {
                 status_id: status_id
@@ -128,10 +128,10 @@ router.put("/editStatusPetition/:id", async (req, res) => {
 
 router.delete("/deletePetition/:id", async (req, res) => {
     try {
-        let { id: petId } = req.params
+        let { id: petition_id } = req.params
         let result = await petition.delete({
             where: {
-                petition_id: petId
+                petition_id: petition_id
             }
         })
 
