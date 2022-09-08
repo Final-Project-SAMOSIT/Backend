@@ -18,6 +18,20 @@ router.get("/getAllUnionYear", async (req, res) => {
     return res.send({ data: results })
 })
 
+router.post('/createUnionYear', async (req, res) => {
+    let { body } = req
+    let result
+    try {
+        result = await union_year.create({
+            data: body
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({ error: error.message })
+    }
+    return res.send({ data: result })
+})
+
 router.get("/getStudentUnion", async (req, res) => {
     let results = []
     let { union_year = 0 } = req.query
