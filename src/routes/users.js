@@ -5,6 +5,7 @@ const { Role } = require("../constant/roleId")
 const roleAuth = require("../middlewares/role.middleware")
 const authMiddleware = require('../middlewares/auth.middleware')
 let { user_details: users, roles } = Prisma
+const prismaErrorHandling = require("../services/prismaErrorHandler")
 
 router.get("/getUsers", async (req, res) => {
     let results = await users.findMany()
@@ -19,6 +20,7 @@ router.get('/allRole', async (req, res) => {
     try {
         results = await roles.findMany()
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: results })
@@ -36,6 +38,7 @@ router.patch('/updateUser/:id', authMiddleware, roleAuth([Role.ADMIN]), async (r
             data: body
         })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: results })

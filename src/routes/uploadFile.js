@@ -4,7 +4,7 @@ const multer = require("multer")
 const sharp = require("sharp")
 const router = require('express').Router()
 const multerStorage = multer.memoryStorage()
-
+const prismaErrorHandling = require("../services/prismaErrorHandler")
 const bucket = getStorage().bucket()
 
 const filter = (req, file, cb) => {
@@ -41,6 +41,7 @@ router.post("/uploadFile", imageUploader.single('photo'), async (req, res, next)
         let imageName = await resizeImageAndUpload(image)
         fileName = `https://firebasestorage.googleapis.com/v0/b/smosit-project.appspot.com/o/${imageName}?alt=media`
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: fileName })

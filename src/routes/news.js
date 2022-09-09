@@ -7,6 +7,7 @@ const { Role } = require("../constant/roleId")
 const roleAuth = require("../middlewares/role.middleware")
 const { NEW_TYPE } = require("../constant/newTypeId")
 const dayjs = require("dayjs")
+const prismaErrorHandling = require("../services/prismaErrorHandler")
 
 router.get("/getNews", async (req, res) => {
     let results = []
@@ -55,6 +56,7 @@ router.get("/getNews", async (req, res) => {
             }
         })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: results, allItem: countDocument, take: take, skip: skip })
@@ -78,6 +80,7 @@ router.get("/getNews/:id", async (req, res) => {
             }
         })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     if (!result) {
@@ -107,6 +110,7 @@ router.post("/addNews", authMiddleware, roleAuth([Role.PUBLISHER]), async (req, 
             data: newsBody
         })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: result })
@@ -125,6 +129,7 @@ router.patch("/editNews/:id", authMiddleware, roleAuth([Role.PUBLISHER]), async 
             data: { ...body, news_updated_at: dayjs().toDate() }
         })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: result })
@@ -141,6 +146,7 @@ router.delete("/deleteNews/:id", authMiddleware, roleAuth([Role.PUBLISHER]), asy
             },
         })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: result })
@@ -185,6 +191,7 @@ router.get("/getExperiences", async (req, res) => {
             }
         })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: result, allItem: countDocument, take: take, skip: skip })
@@ -208,6 +215,7 @@ router.get("/getExperiences/:id", async (req, res) => {
             }
         })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     if (!result) {

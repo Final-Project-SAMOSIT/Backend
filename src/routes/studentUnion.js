@@ -1,6 +1,10 @@
 const router = require('express').Router()
 const { Prisma } = require('../constant/prisma')
+const authMiddleware = require('../middlewares/auth.middleware')
+const { Role } = require("../constant/roleId")
+const roleAuth = require("../middlewares/role.middleware")
 const { student_union, union_year, student_union_info } = Prisma
+const prismaErrorHandling = require("../services/prismaErrorHandler")
 
 router.get("/getAllUnionYear", async (req, res) => {
     let results = []
@@ -13,12 +17,13 @@ router.get("/getAllUnionYear", async (req, res) => {
             }
         })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: results })
 })
 
-router.post('/createUnionYear', async (req, res) => {
+router.post('/createUnionYear', authMiddleware, roleAuth([Role.PUBLISHER]), async (req, res) => {
     let { body } = req
     let result
     try {
@@ -26,7 +31,7 @@ router.post('/createUnionYear', async (req, res) => {
             data: body
         })
     } catch (error) {
-        console.log(error);
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: result })
@@ -46,12 +51,13 @@ router.get("/getStudentUnion", async (req, res) => {
             },
         })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: results })
 })
 
-router.post('/createStudentUnion', async (req, res) => {
+router.post('/createStudentUnion', authMiddleware, roleAuth([Role.PUBLISHER]), async (req, res) => {
     let { body } = req
     let result
     try {
@@ -59,13 +65,13 @@ router.post('/createStudentUnion', async (req, res) => {
             data: body
         })
     } catch (error) {
-        console.log(error);
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: result })
 })
 
-router.patch('/editStudentUnion/:id', async (req, res) => {
+router.patch('/editStudentUnion/:id', authMiddleware, roleAuth([Role.PUBLISHER]), async (req, res) => {
     let { body } = req
     let { id } = req.params
     let result
@@ -81,13 +87,14 @@ router.patch('/editStudentUnion/:id', async (req, res) => {
             }
         })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: result })
 })
 
 
-router.delete('/deleteStudentUnion/:id', async (req, res) => {
+router.delete('/deleteStudentUnion/:id', authMiddleware, roleAuth([Role.PUBLISHER]), async (req, res) => {
     let { id } = req.params
     let result
     try {
@@ -97,6 +104,7 @@ router.delete('/deleteStudentUnion/:id', async (req, res) => {
             },
         })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
     return res.send({ data: result })

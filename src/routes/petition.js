@@ -5,6 +5,7 @@ const dayjs = require("dayjs")
 const { Role } = require("../constant/roleId")
 const { Prisma } = require("../constant/prisma")
 const { petition } = Prisma
+const prismaErrorHandling = require("../services/prismaErrorHandler")
 
 router.get("/getPetition", async (req, res) => {
     try {
@@ -23,6 +24,7 @@ router.get("/getPetition", async (req, res) => {
 
         return res.send({ data: test })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ status: "Don't have any data", message: error.message })
     }
 
@@ -50,6 +52,7 @@ router.get("/getPetition/:userId", async (req, res) => {
         return res.send({ data: result })
 
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ status: "Don't have any data", message: error.message })
     }
 })
@@ -73,7 +76,7 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
             data: {
                 petition_topic: petition_topic,
                 petition_details: petition_details,
-                petition_date: dayjs().add(7, 'hour').toDate(),
+                petition_date: dayjs().toDate(),
                 user_id: user_id,
                 petition_type_id: petition_type_id,
                 status_id: "1"
@@ -82,6 +85,7 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
 
         return res.send({ msg: "Successfully", data: result })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ status: "Don't have any data", message: error.message })
     }
 })
@@ -122,6 +126,7 @@ router.put("/editStatusPetition/:id", async (req, res) => {
 
         return res.send({ status: `Update sucessfully`, data: updateStatus })
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ status: "Can't update", message: error.message })
     }
 })
@@ -141,6 +146,7 @@ router.delete("/deletePetition/:id", async (req, res) => {
         return res.send({ status: "Delete Successful" })
 
     } catch (error) {
+        prismaErrorHandling(error, null, res)
         return res.status(400).send({ status: "Can't delete", message: error.message })
     }
 })
