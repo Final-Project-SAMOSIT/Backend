@@ -40,7 +40,7 @@ router.get("/getNews", async (req, res) => {
             take: Number(take),
             skip: Number(skip),
             orderBy: {
-                news_created_at: "desc"
+                news_updated_at: "desc"
             }
         })
         countDocument = await news.count({
@@ -175,7 +175,7 @@ router.get("/getExperiences", async (req, res) => {
             take: Number(take),
             skip: Number(skip),
             orderBy: {
-                news_created_at: "desc"
+                news_updated_at: "desc"
             }
         })
         countDocument = await news.count({

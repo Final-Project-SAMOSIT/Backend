@@ -6,6 +6,7 @@ const { Role } = require("../constant/roleId")
 const { Prisma } = require("../constant/prisma")
 const { petition } = Prisma
 const prismaErrorHandling = require("../services/prismaErrorHandler")
+const { PETTITION_STATUS } = require("../constant/pettitionStatus")
 
 router.get("/getPetition", async (req, res) => {
     try {
@@ -31,7 +32,7 @@ router.get("/getPetition", async (req, res) => {
 })
 
 router.get("/getPetition/:userId", async (req, res) => {
-    try { 
+    try {
         let { userId: userId } = req.params
         let result = await petition.findMany({
             where: {
@@ -61,15 +62,15 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
     try {
         let { petition_topic, petition_details, petition_type_id } = req.body
         let { user_id } = req.user
-        let userTotal = await petition.findMany({
+        let petitionCount = await petition.findMany({
             where: {
                 user_id: user_id,
-                status_id: Role.ADMIN
+                status_id: PETTITION_STATUS.SENT
             }
         })
 
-        if (userTotal.length >= 5) {
-            return res.status(403).send({ msg: "Can't add petitions more than 5 times in sent status" })
+        if (petitionCount.length >= 5) {
+            return res.status(500).send({ msg: "Can't add petitions more than 5 times in sent status" })
         }
 
         let result = await petition.create({
@@ -79,7 +80,7 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
                 petition_date: dayjs().toDate(),
                 user_id: user_id,
                 petition_type_id: petition_type_id,
-                status_id: "1"
+                status_id: PETTITION_STATUS.SENT
             }
         })
 
@@ -97,19 +98,19 @@ router.put("/editStatusPetition/:id", async (req, res) => {
         let status_id = ""
         switch (status) {
             case "Sent":
-                status_id = "1"
+                status_id = PETTITION_STATUS.SENT
                 break;
             case "Approve":
-                status_id = "2"
+                status_id = PETTITION_STATUS.APPROVE
                 break;
             case "In Progress":
-                status_id = "3"
+                status_id = PETTITION_STATUS.IN_PROGRESS
                 break;
             case "Done":
-                status_id = "4"
+                status_id = PETTITION_STATUS.DONE
                 break;
             case "Reject":
-                status_id = "5"
+                status_id = PETTITION_STATUS.REJECT
                 break;
             default:
                 throw new Error("Cannot set this status")
