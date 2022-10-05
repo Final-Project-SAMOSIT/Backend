@@ -35,7 +35,8 @@ router.get("/getNews", async (req, res) => {
                 news_created_at: true,
                 news_updated_at: true,
                 news_img: true,
-                news_types: true
+                news_types: true,
+                views: true,
             },
             take: Number(take),
             skip: Number(skip),
@@ -77,8 +78,11 @@ router.get("/getNews/:id", async (req, res) => {
                     }
                 ],
                 news_id: id
-            }
+            },
         })
+        if (result) {
+            await news.update({ where: { news_id: id }, data: { views: result.views + 1 } })
+        }
     } catch (error) {
         prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
@@ -214,6 +218,9 @@ router.get("/getExperiences/:id", async (req, res) => {
                 news_id: id
             }
         })
+        if (result) {
+            await news.update({ where: { news_id: id }, data: { views: result.views + 1 } })
+        }
     } catch (error) {
         prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })

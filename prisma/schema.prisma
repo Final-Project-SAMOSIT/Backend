@@ -10,15 +10,16 @@ datasource db {
 
 model news_contents {
   news_id                              String       @id @default(uuid()) @db.VarChar(40)
-  news_title                           String       @db.VarChar(100)
+  news_title                           String       @db.VarChar(200)
   news_details                         String       @db.VarChar(5000)
   news_created_at                      DateTime     @db.DateTime(0)
   news_updated_at                      DateTime     @db.DateTime(0)
   news_img                             String       @db.VarChar(250)
-  news_caption_img                     String?      @db.VarChar(100)
+  news_caption_img                     String?      @db.VarChar(150)
   union_year                           Int
   news_type_id                         String       @db.VarChar(10)
   user_id                              String       @db.VarChar(20)
+  views                                Int          @default(0)
   news_types                           news_types   @relation(fields: [news_type_id], references: [news_type_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_news_contents_news_types1")
   union_year_news_contentsTounion_year union_year   @relation(fields: [union_year], references: [union_year], onDelete: NoAction, onUpdate: NoAction, map: "fk_news_contents_union_year1")
   user_details                         user_details @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_news_contents_user_details1")
@@ -102,20 +103,123 @@ model student_union_info {
 
 model union_year {
   union_year    Int             @id
+  is_accepted   Boolean         @default(false)
   news_contents news_contents[]
   student_union student_union[]
+  voting        voting[]
 }
 
 model user_details {
-  user_id       String          @id @db.VarChar(20)
-  user_type     String?         @db.VarChar(20)
-  name_th       String?         @db.VarChar(50)
-  name_en       String?         @db.VarChar(50)
-  email         String?         @db.VarChar(50)
-  role_id       String          @db.VarChar(10)
-  roles         roles           @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "user_details_roles_fk")
-  news_contents news_contents[]
-  petition      petition[]
+  user_id          String             @id @db.VarChar(20)
+  user_type        String?            @db.VarChar(20)
+  name_th          String?            @db.VarChar(50)
+  name_en          String?            @db.VarChar(50)
+  email            String?            @db.VarChar(50)
+  role_id          String             @db.VarChar(10)
+  roles            roles              @relation(fields: [role_id], references: [role_id], onDelete: NoAction, onUpdate: NoAction, map: "user_details_roles_fk")
+  news_contents    news_contents[]
+  petition         petition[]
+  project_approved project_approved[]
+  request_info     request_info[]
+  voting_results   voting_results[]
 
   @@index([role_id], map: "user_details_roles_fk")
+}
+
+model form_info {
+  form_info_id     String             @id @db.VarChar(40)
+  form_no          String             @db.VarChar(20)
+  institution      String             @db.VarChar(100)
+  solution         String             @db.VarChar(100)
+  created_date     DateTime           @db.Date
+  contact          String?            @db.VarChar(20)
+  project_approved project_approved[]
+  request_info     request_info[]
+}
+
+model project_approved {
+  project_id      String       @id @db.VarChar(40)
+  project_name    String       @db.VarChar(100)
+  club_name       String       @db.VarChar(100)
+  start_date      DateTime     @db.Date
+  end_date        DateTime     @db.Date
+  location        String       @db.VarChar(100)
+  project_purpose String       @db.VarChar(200)
+  about_project   String       @db.VarChar(200)
+  cost            Int
+  cost_des_th     String       @db.VarChar(100)
+  form_info_id    String       @db.VarChar(40)
+  user_id         String       @db.VarChar(20)
+  form_info       form_info    @relation(fields: [form_info_id], references: [form_info_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_project_approved_form_info1")
+  user_details    user_details @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_project_approved_user_details")
+
+  @@index([form_info_id], map: "fk_project_approved_form_info1_idx")
+  @@index([user_id], map: "fk_project_approved_user_details_idx")
+}
+
+model request_approved {
+  request_id         String             @id @db.VarChar(40)
+  request_info_id    String             @db.VarChar(40)
+  sub_activity_id    String             @db.VarChar(10)
+  activity_hour      Int
+  request_info       request_info       @relation(fields: [request_info_id], references: [request_info_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_request_approved_Request_info1")
+  sub_activity_types sub_activity_types @relation(fields: [sub_activity_id], references: [sub_activity_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_request_approved_activity1")
+
+  @@index([request_info_id], map: "fk_request_approved_Request_info1_idx")
+  @@index([sub_activity_id], map: "fk_request_approved_activity1_idx")
+}
+
+model request_info {
+  request_info_id  String             @id @db.VarChar(40)
+  project_name     String             @db.VarChar(100)
+  project_due_to   String             @db.VarChar(100)
+  start_date       DateTime           @db.Date
+  end_date         DateTime           @db.Date
+  location         String             @db.VarChar(100)
+  cost             Int
+  cost_des_th      String             @db.VarChar(100)
+  form_info_id     String             @db.VarChar(40)
+  user_id          String             @db.VarChar(20)
+  form_info        form_info          @relation(fields: [form_info_id], references: [form_info_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Request_info_form_info1")
+  user_details     user_details       @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Request_info_user_details1")
+  request_approved request_approved[]
+
+  @@index([form_info_id], map: "fk_Request_info_form_info1_idx")
+  @@index([user_id], map: "fk_Request_info_user_details1_idx")
+}
+
+model voting {
+  vote_id                       String     @id @default(uuid()) @db.VarChar(40)
+  open_date                     DateTime   @db.DateTime(0)
+  end_date                      DateTime   @db.DateTime(0)
+  union_year                    Int
+  union_year_union_yearTovoting union_year @relation(fields: [union_year], references: [union_year], onDelete: NoAction, onUpdate: NoAction, map: "fk_voting_results_union_year1")
+
+  @@index([union_year], map: "fk_voting_results_union_year1_idx")
+}
+
+model activity_types {
+  activity_id        String               @id @db.VarChar(10)
+  activity_type      String               @db.VarChar(50)
+  sub_activity_types sub_activity_types[]
+}
+
+model sub_activity_types {
+  sub_activity_id   String             @id @db.VarChar(10)
+  sub_activity_type String             @db.VarChar(50)
+  activity_id       String             @db.VarChar(10)
+  activity_types    activity_types     @relation(fields: [activity_id], references: [activity_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_sub_activity_types_activity_types1")
+  request_approved  request_approved[]
+
+  @@index([activity_id], map: "fk_sub_activity_types_activity_types1_idx")
+}
+
+model voting_results {
+  vote_result_id String       @id @default(uuid()) @db.VarChar(40)
+  vote_result    String       @db.VarChar(10)
+  vote_date      DateTime     @db.DateTime(0)
+  user_id        String       @db.VarChar(20)
+  user_details   user_details @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_voting_user_details1")
+
+  @@index([user_id], map: "fk_voting_user_details1_idx")
 }

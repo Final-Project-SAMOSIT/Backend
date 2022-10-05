@@ -24,11 +24,35 @@ router.get("/getAllUnionYear", async (req, res) => {
 })
 
 router.post('/createUnionYear', authMiddleware, roleAuth([Role.PUBLISHER]), async (req, res) => {
-    let { body } = req
+    let { union_year: unionYear } = req.body
+    let newsBody = {
+        union_year: unionYear,
+        is_accepted: false
+    }
+
     let result
     try {
         result = await union_year.create({
-            data: body
+            data: newsBody
+        })
+    } catch (error) {
+        prismaErrorHandling(error, null, res)
+        return res.status(400).send({ error: error.message })
+    }
+    return res.send({ data: result })
+})
+
+router.patch('/updateUnionYear/:id', authMiddleware, roleAuth([Role.PUBLISHER]), async (req, res) => {
+    let { id } = req.params
+    let result
+    try {
+        result = await union_year.update({
+            where: {
+                union_year: id
+            },
+            data: {
+                is_accepted: true
+            }
         })
     } catch (error) {
         prismaErrorHandling(error, null, res)

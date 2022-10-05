@@ -44,4 +44,13 @@ router.patch('/updateUser/:id', authMiddleware, roleAuth([Role.ADMIN]), async (r
     return res.send({ data: results })
 })
 
+router.get('/user/me', authMiddleware, async (req, res) => {
+    let { user_id, name_en } = req.user
+    let results = {
+        user_id,
+        name_en
+    }
+    return res.send({ data: results })
+})
+
 module.exports = router
