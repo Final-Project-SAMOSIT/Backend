@@ -16,6 +16,13 @@ router.get('/getVoteResult', async (req, res) => {
     return res.send({ data: results })
 })
 
+router.get('/getUserVoteResult',authMiddleware, async (req, res) => {
+    let { user_id } = req.user
+    let { year } = req.query
+    let results = await Prisma.$queryRaw`SELECT * FROM voting_results WHERE substring(vote_date,1,4) = ${year} and user_id = ${user_id}`
+    return res.send({ data: results })
+})
+
 router.get('/getSumVoteResult', async (req, res) => {
     let { year } = req.query
     let results = await Prisma.$queryRaw`SELECT COUNT(vote_result_id) as vote, vote_result FROM voting_results WHERE substring(vote_date,1,4) = ${year} GROUP BY vote_result`

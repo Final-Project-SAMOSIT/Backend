@@ -152,5 +152,21 @@ router.delete('/deleteStudentUnion/:id', authMiddleware, roleAuth([Role.PUBLISHE
     return res.send({ data: result })
 })
 
+router.delete('/deleteUnionYear/:id', authMiddleware, roleAuth([Role.PUBLISHER]), async (req, res) => {
+    let { id } = req.params
+    let result
+    try {
+        result = await union_year.delete({
+            where: {
+                union_year: Number(id) 
+            }
+        })
+    } catch (error) {
+        prismaErrorHandling(error, null, res)
+        return res.status(400).send({ error: error.message })
+    }
+    return res.send({ data: result })
+})
+
 
 module.exports = router
