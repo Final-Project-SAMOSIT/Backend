@@ -84,7 +84,7 @@ model student_union {
   position_id                          String             @db.VarChar(10)
   student_union_info                   student_union_info @relation(fields: [std_id], references: [std_id], onDelete: NoAction, onUpdate: NoAction, map: "student_union_info_fk")
   std_position                         std_position       @relation(fields: [position_id], references: [position_id], onDelete: NoAction, onUpdate: NoAction, map: "student_union_position_fk")
-  union_year_student_unionTounion_year union_year         @relation(fields: [union_year], references: [union_year], onDelete: NoAction, onUpdate: NoAction, map: "student_union_year_fk")
+  union_year_student_unionTounion_year union_year         @relation(fields: [union_year], references: [union_year], onDelete: Cascade, onUpdate: NoAction, map: "student_union_year_fk")
 
   @@index([std_id], map: "student_union_info_fk")
   @@index([position_id], map: "student_union_position_fk")
@@ -193,7 +193,7 @@ model voting {
   open_date                     DateTime   @db.DateTime(0)
   end_date                      DateTime   @db.DateTime(0)
   union_year                    Int
-  union_year_union_yearTovoting union_year @relation(fields: [union_year], references: [union_year], onDelete: NoAction, onUpdate: NoAction, map: "fk_voting_results_union_year1")
+  union_year_union_yearTovoting union_year @relation(fields: [union_year], references: [union_year], onDelete: Cascade, onUpdate: NoAction, map: "fk_voting_results_union_year1")
 
   @@index([union_year], map: "fk_voting_results_union_year1_idx")
 }
