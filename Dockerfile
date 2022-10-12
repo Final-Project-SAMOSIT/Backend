@@ -14,6 +14,4 @@ COPY . /usr/src/app
 
 EXPOSE 4000
 
-RUN npx prisma generate
-
 CMD ["npm","run","start"]
