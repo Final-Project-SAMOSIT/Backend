@@ -37,6 +37,7 @@ const resizeImageAndUpload = async (image) => {
 
 router.post("/uploadFile", imageUploader.single('photo'), async (req, res, next) => {
     const { file: image } = req
+    console.log("🚀 ~ file: uploadFile.js ~ line 40 ~ router.post ~ image", image)
     let fileName
     try {
         let imageName = await resizeImageAndUpload(image)
