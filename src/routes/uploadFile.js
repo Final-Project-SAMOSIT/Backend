@@ -21,6 +21,7 @@ const imageUploader = multer({
 })
 
 const resizeImageAndUpload = async (image) => {
+    console.log("🚀 ~ file: uploadFile.js ~ line 24 ~ resizeImageAndUpload ~ image", image)
     let fileName = `${Date.now()}_${image.originalname}`
     const resizeImageFunction = async (buffer) => {
         let imageAfterResize = await sharp(buffer).jpeg({ quality: 80 }).toBuffer()
