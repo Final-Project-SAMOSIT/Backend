@@ -1,6 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
-  // previewFeatures = ["referentialActions"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -127,18 +126,20 @@ model user_details {
 }
 
 model form_info {
-  form_info_id     String             @id @db.VarChar(40)
-  form_no          String             @db.VarChar(20)
-  institution      String             @db.VarChar(100)
-  solution         String             @db.VarChar(100)
-  created_date     DateTime           @db.Date
-  contact          String?            @db.VarChar(20)
+  form_info_id     String              @id @default(uuid()) @db.VarChar(40)
+  form_no          String              @db.VarChar(20)
+  institution      String              @db.VarChar(100)
+  solution         String              @db.VarChar(100)
+  created_date     DateTime            @db.Date
+  contact          String?             @db.VarChar(20)
+  Tel              String?             @db.VarChar(20)
+  form_type        form_info_form_type
   project_approved project_approved[]
   request_info     request_info[]
 }
 
 model project_approved {
-  project_id      String       @id @db.VarChar(40)
+  project_id      String       @id @default(uuid()) @db.VarChar(40)
   project_name    String       @db.VarChar(100)
   club_name       String       @db.VarChar(100)
   start_date      DateTime     @db.Date
@@ -150,7 +151,7 @@ model project_approved {
   cost_des_th     String       @db.VarChar(100)
   form_info_id    String       @db.VarChar(40)
   user_id         String       @db.VarChar(20)
-  form_info       form_info    @relation(fields: [form_info_id], references: [form_info_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_project_approved_form_info1")
+  form_info       form_info    @relation(fields: [form_info_id], references: [form_info_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_project_approved_form_info1")
   user_details    user_details @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_project_approved_user_details")
 
   @@index([form_info_id], map: "fk_project_approved_form_info1_idx")
@@ -158,7 +159,7 @@ model project_approved {
 }
 
 model request_approved {
-  request_id         String             @id @db.VarChar(40)
+  request_id         String             @id @default(uuid()) @db.VarChar(40)
   request_info_id    String             @db.VarChar(40)
   sub_activity_id    String             @db.VarChar(10)
   activity_hour      Int
@@ -170,7 +171,7 @@ model request_approved {
 }
 
 model request_info {
-  request_info_id  String             @id @db.VarChar(40)
+  request_info_id  String             @id @default(uuid()) @db.VarChar(40)
   project_name     String             @db.VarChar(100)
   project_due_to   String             @db.VarChar(100)
   start_date       DateTime           @db.Date
@@ -222,4 +223,9 @@ model voting_results {
   user_details   user_details @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_voting_user_details1")
 
   @@index([user_id], map: "fk_voting_user_details1_idx")
+}
+
+enum form_info_form_type {
+  document
+  proposal
 }

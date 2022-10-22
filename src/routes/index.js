@@ -13,6 +13,8 @@ const studentUnionInfo = require("./studentUnionInfo")
 const activityTypes = require("./activityTypes")
 const voteResult = require("./votingResults")
 const voting = require("./voting")
+const formInfo = require("./formInfo")
+const projectApproved = require("./projectApproved")
 
 router.use(authController)
 router.use(petitionType)
@@ -28,6 +30,8 @@ router.use(studentUnionInfo)
 router.use(activityTypes)
 router.use(voteResult)
 router.use(voting)
+router.use(formInfo)
+router.use(projectApproved)
 
 router.get("/", (req, res) => {
     return res.send({ api: "SAMOSIT" })
