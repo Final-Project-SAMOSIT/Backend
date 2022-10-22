@@ -58,8 +58,8 @@ router.post("/createProjectApproved", authMiddleware, roleAuth([Role.USER,Role.P
     let approveProject = {
         project_name: project_name,
         club_name: club_name,
-        start_date: start_date,
-        end_date: end_date,
+        start_date: new Date(start_date),
+        end_date: new Date(end_date),
         location: location,
         project_purpose: project_purpose,
         about_project: about_project,
@@ -100,8 +100,8 @@ router.patch("/updateProjectApproved/:fid/:pid", authMiddleware, roleAuth([Role.
     let approveProject = {
         project_name: project_name,
         club_name: club_name,
-        start_date: start_date,
-        end_date: end_date,
+        start_date: new Date(start_date),
+        end_date: new Date(end_date),
         location: location,
         project_purpose: project_purpose,
         about_project: about_project,

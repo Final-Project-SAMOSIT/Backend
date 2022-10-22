@@ -130,7 +130,7 @@ model form_info {
   form_no          String              @db.VarChar(20)
   institution      String              @db.VarChar(100)
   solution         String              @db.VarChar(100)
-  created_date     DateTime            @db.Date
+  created_date     DateTime            @db.DateTime(0)
   contact          String?             @db.VarChar(20)
   Tel              String?             @db.VarChar(20)
   form_type        form_info_form_type
@@ -142,8 +142,8 @@ model project_approved {
   project_id      String       @id @default(uuid()) @db.VarChar(40)
   project_name    String       @db.VarChar(100)
   club_name       String       @db.VarChar(100)
-  start_date      DateTime     @db.Date
-  end_date        DateTime     @db.Date
+  start_date      DateTime     @db.DateTime(0)
+  end_date        DateTime     @db.DateTime(0)
   location        String       @db.VarChar(100)
   project_purpose String       @db.VarChar(200)
   about_project   String       @db.VarChar(200)
@@ -174,8 +174,8 @@ model request_info {
   request_info_id  String             @id @default(uuid()) @db.VarChar(40)
   project_name     String             @db.VarChar(100)
   project_due_to   String             @db.VarChar(100)
-  start_date       DateTime           @db.Date
-  end_date         DateTime           @db.Date
+  start_date       DateTime           @db.DateTime(0)
+  end_date         DateTime           @db.DateTime(0)
   location         String             @db.VarChar(100)
   cost             Int
   cost_des_th      String             @db.VarChar(100)
