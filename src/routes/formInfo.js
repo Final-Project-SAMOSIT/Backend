@@ -41,7 +41,7 @@ router.get("/allDocument", async (req, res) => {
     return res.send({ data: results, allItem: countDocument, take: take, skip: skip })
 })
 
-router.post("/createProjectApproved", authMiddleware, roleAuth([Role.USER]), async (req, res) => {
+router.post("/createProjectApproved", authMiddleware, roleAuth([Role.USER,Role.PUBLISHER]), async (req, res) => {
     let { body, user } = req
     let { form_info: formBody, project_name, club_name, start_date, end_date, location, project_purpose, about_project, cost, cost_des_th } = body
     let { form_no, institution, solution, contact, tel, form_type } = formBody
@@ -84,7 +84,7 @@ router.post("/createProjectApproved", authMiddleware, roleAuth([Role.USER]), asy
     return res.send({ data: result })
 })
 
-router.patch("/updateProjectApproved/:fid/:pid", authMiddleware, roleAuth([Role.USER]), async (req, res) => {
+router.patch("/updateProjectApproved/:fid/:pid", authMiddleware, roleAuth([Role.USER,Role.PUBLISHER]), async (req, res) => {
     let { body, user } = req
     let { form_info: formBody, project_name, club_name, start_date, end_date, location, project_purpose, about_project, cost, cost_des_th } = body
     let { form_no, institution, solution, contact, tel, form_type } = formBody
@@ -132,7 +132,7 @@ router.patch("/updateProjectApproved/:fid/:pid", authMiddleware, roleAuth([Role.
     return res.send({ data: result })
 })
 
-router.delete("/deleteProjectApproved/:fid", authMiddleware, roleAuth([Role.USER]), async (req, res) => {
+router.delete("/deleteProjectApproved/:fid", authMiddleware, roleAuth([Role.USER,Role.PUBLISHER]), async (req, res) => {
     let result
     try {
         result = await form_info.delete({
