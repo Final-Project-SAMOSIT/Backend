@@ -136,7 +136,7 @@ router.patch("/updateProjectApproved/:fid/:pid", authMiddleware, roleAuth([Role.
     return res.send({ data: result })
 })
 
-router.delete("/deleteProjectApproved/:fid", authMiddleware, roleAuth([Role.USER, Role.PUBLISHER]), async (req, res) => {
+router.delete("/deleteForm/:fid", authMiddleware, roleAuth([Role.USER, Role.PUBLISHER]), async (req, res) => {
     let result
     try {
         result = await form_info.delete({
@@ -259,21 +259,6 @@ router.patch("/updateRequestApproved/:fid/:rid", authMiddleware, roleAuth([Role.
         })
     }
     catch (error) {
-        prismaErrorHandling(error, null, res)
-        return res.status(400).send({ error: error.message })
-    }
-    return res.send({ data: result })
-})
-
-router.delete("/deleteRequestApproved/:fid", authMiddleware, roleAuth([Role.USER, Role.PUBLISHER]), async (req, res) => {
-    let result
-    try {
-        result = await form_info.delete({
-            where: {
-                form_info_id: req.params.fid
-            }
-        })
-    } catch (error) {
         prismaErrorHandling(error, null, res)
         return res.status(400).send({ error: error.message })
     }
