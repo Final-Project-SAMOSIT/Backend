@@ -152,7 +152,7 @@ model project_approved {
   form_info_id    String       @db.VarChar(40)
   user_id         String       @db.VarChar(20)
   form_info       form_info    @relation(fields: [form_info_id], references: [form_info_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_project_approved_form_info1")
-  user_details    user_details @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_project_approved_user_details")
+  user_details    user_details @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_project_approved_user_details")
 
   @@index([form_info_id], map: "fk_project_approved_form_info1_idx")
   @@index([user_id], map: "fk_project_approved_user_details_idx")
@@ -163,8 +163,8 @@ model request_approved {
   request_info_id    String             @db.VarChar(40)
   sub_activity_id    String             @db.VarChar(10)
   activity_hour      Int
-  request_info       request_info       @relation(fields: [request_info_id], references: [request_info_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_request_approved_Request_info1")
-  sub_activity_types sub_activity_types @relation(fields: [sub_activity_id], references: [sub_activity_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_request_approved_activity1")
+  request_info       request_info       @relation(fields: [request_info_id], references: [request_info_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_request_approved_Request_info1")
+  sub_activity_types sub_activity_types @relation(fields: [sub_activity_id], references: [sub_activity_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_request_approved_activity1")
 
   @@index([request_info_id], map: "fk_request_approved_Request_info1_idx")
   @@index([sub_activity_id], map: "fk_request_approved_activity1_idx")
@@ -181,8 +181,8 @@ model request_info {
   cost_des_th      String             @db.VarChar(100)
   form_info_id     String             @db.VarChar(40)
   user_id          String             @db.VarChar(20)
-  form_info        form_info          @relation(fields: [form_info_id], references: [form_info_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Request_info_form_info1")
-  user_details     user_details       @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_Request_info_user_details1")
+  form_info        form_info          @relation(fields: [form_info_id], references: [form_info_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_Request_info_form_info1")
+  user_details     user_details       @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_Request_info_user_details1")
   request_approved request_approved[]
 
   @@index([form_info_id], map: "fk_Request_info_form_info1_idx")

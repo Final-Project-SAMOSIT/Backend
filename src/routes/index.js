@@ -15,6 +15,7 @@ const voteResult = require("./votingResults")
 const voting = require("./voting")
 const formInfo = require("./formInfo")
 const projectApproved = require("./projectApproved")
+const requestApproved = require("./requestApprove")
 
 router.use(authController)
 router.use(petitionType)
@@ -32,6 +33,7 @@ router.use(voteResult)
 router.use(voting)
 router.use(formInfo)
 router.use(projectApproved)
+router.use(requestApproved)
 
 router.get("/", (req, res) => {
     return res.send({ api: "SAMOSIT" })
