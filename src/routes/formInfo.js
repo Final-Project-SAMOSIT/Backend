@@ -19,6 +19,10 @@ router.get("/allDocument", async (req, res) => {
                     }
                 }
             },
+            include: {
+                project_approved: true,
+                request_info: true
+            },
             take: Number(take),
             skip: Number(skip),
             orderBy: {
