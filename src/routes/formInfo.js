@@ -193,8 +193,25 @@ router.post('/createRequestApproved', authMiddleware, roleAuth([Role.USER, Role.
                 activity_hour: item.activity_hour,
             }
         })
-        result = await request_approved.createMany({
+        await request_approved.createMany({
             data: requestApproveBody
+        })
+        result = await request_approved.findMany({
+            where: {
+                request_info_id: requestInfoResponse.request_info_id
+            },
+            select: {
+                activity_hour: true,
+                sub_activity_id: true,
+                request_info: {
+                    select: {
+                        form_info: {
+                            select: { form_info_id: true }
+                        },
+                        request_info_id: true
+                    }
+                }
+            }
         })
     } catch (error) {
         prismaErrorHandling(error, null, res)
