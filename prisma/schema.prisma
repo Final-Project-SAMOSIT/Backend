@@ -147,7 +147,7 @@ model project_approved {
   location        String       @db.VarChar(100)
   project_purpose String       @db.VarChar(200)
   about_project   String       @db.VarChar(200)
-  cost            Int
+  cost            Float
   cost_des_th     String       @db.VarChar(100)
   form_info_id    String       @db.VarChar(40)
   user_id         String       @db.VarChar(20)
@@ -177,7 +177,7 @@ model request_info {
   start_date       DateTime           @db.DateTime(0)
   end_date         DateTime           @db.DateTime(0)
   location         String             @db.VarChar(100)
-  cost             Int
+  cost             Float
   cost_des_th      String             @db.VarChar(100)
   form_info_id     String             @db.VarChar(40)
   user_id          String             @db.VarChar(20)
