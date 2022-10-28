@@ -13,12 +13,18 @@ router.get("/allDocument", async (req, res) => {
     try {
         results = await form_info.findMany({
             where: {
-                project_approved: {
-                    every: {
-                        user_id: user_id
+                    project_approved: {
+                        every: {
+                            user_id: user_id
+                        }
+                    },
+                    request_info: {
+                        every: {   
+                            user_id: user_id
+                        }
                     }
-                }
             },
+                
             include: {
                 project_approved: true,
                 request_info: true
