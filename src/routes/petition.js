@@ -60,7 +60,7 @@ router.get("/getPetition/:userId", async (req, res) => {
 
 router.post("/addPetition", authMiddleware, async (req, res) => {
     try {
-        let { petition_topic, petition_details, petition_type_id } = req.body
+        let { petition_topic, petition_details, petition_type_id,petition_img } = req.body
         let { user_id } = req.user
         let petitionCount = await petition.findMany({
             where: {
@@ -80,7 +80,8 @@ router.post("/addPetition", authMiddleware, async (req, res) => {
                 petition_date: dayjs().toDate(),
                 user_id: user_id,
                 petition_type_id: petition_type_id,
-                status_id: PETTITION_STATUS.SENT
+                status_id: PETTITION_STATUS.SENT,
+                petition_img: petition_img
             }
         })
 

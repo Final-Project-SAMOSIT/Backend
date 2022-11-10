@@ -42,6 +42,7 @@ model petition {
   user_id          String         @db.VarChar(20)
   petition_type_id String         @db.VarChar(10)
   status_id        String         @db.VarChar(10)
+  petition_img     String?        @db.VarChar(250)
   status           status         @relation(fields: [status_id], references: [status_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_status_fk")
   petition_types   petition_types @relation(fields: [petition_type_id], references: [petition_type_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_types_fk")
   user_details     user_details   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "petition_user_details_fk")
