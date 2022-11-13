@@ -7,8 +7,10 @@ const authMiddleware = require('../middlewares/auth.middleware')
 let { user_details: users, roles } = Prisma
 const prismaErrorHandling = require("../services/prismaErrorHandler")
 
-router.get("/getUsers", async (req, res) => {
-    let results = await users.findMany()
+router.get("/getUsers", authMiddleware, roleAuth([Role.ADMIN]), async (req, res) => {
+    let results = await users.findMany({
+        orderBy: {role_id: "asc"}
+    })
     if (results == undefined || results.length < 0) {
         return res.status(204).send({ status: "Don't have any data" })
     }
