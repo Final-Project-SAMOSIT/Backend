@@ -55,4 +55,4 @@ jobs:
             docker images
             docker-compose up -d backend
             docker image prune -f 
-            docker ps -a 
+            docker ps -a  
